@@ -41,11 +41,11 @@ server.get('/api/userJoinedGroups', function (req, res) {
 //   console.log('Example server listening on port 3000!');
 // });
 
-//const dburl = 'mongodb+srv://ajit:ajit@cluster0-yy2cw.mongodb.net/test?retryWrites=true&w=majority'
+const dburl = 'mongodb+srv://ajit:ajit@cluster0-yy2cw.mongodb.net/test?retryWrites=true&w=majority'
 
 
 // My DB
-const dburl = 'mongodb+srv://admin:admin@cluster0-rrfey.mongodb.net/test?retryWrites=true&w=majority'
+// const dburl = 'mongodb+srv://admin:admin@cluster0-rrfey.mongodb.net/test?retryWrites=true&w=majority'
 const dbclient = new MongoClient(dburl, { useUnifiedTopology: true });
 dbclient.connect( (err, client) => {
   if (err) return console.log(err)
