@@ -9,7 +9,8 @@ server.get('/', function (req, res) {
 
 server.get('/api/users', function (req, res) {
   //res.send('Hello World!');
-  db.collection("Users"). find({}).project({_id:0, name:1, email:1}).toArray(function(err, result) {
+  console.log("/api/users");
+  db.collection("users"). find({}).project({_id:0, name:1, email:1}).toArray(function(err, result) {
     console.log(result);
     res.send(result);
   });
@@ -17,9 +18,10 @@ server.get('/api/users', function (req, res) {
 
 server.get('/api/findGroupsWithClassName', function (req, res) {
   //res.send('Hello World!');
+  console.log("/api/findGroupsWithClassName");
   className = req.query.className;
   var query = {"class" : className};
-  db.collection("Groups"). find(query).project({_id:0 }).toArray(function(err, result) {
+  db.collection("groups"). find(query).project({_id:0 }).toArray(function(err, result) {
     console.log(result);
     res.send(result);
   });
