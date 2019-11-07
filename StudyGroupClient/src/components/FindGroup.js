@@ -39,12 +39,6 @@ class FindGroupScreen extends Component {
       return (
         <View>
           <MyHeader drawerOpen={() => this.props.navigation.openDrawer()}/>
-
-        <Text>FindGroupScreen</Text>
-        <Button
-          onPress={() => this.props.navigation.navigate('Home')}
-          title="Go back home"
-        />
         <Text>Start Time = {this.state.group1_start_time}</Text>
         </View>
       );

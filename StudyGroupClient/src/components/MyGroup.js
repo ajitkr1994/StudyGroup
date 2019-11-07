@@ -36,15 +36,13 @@ class MyGroupScreen extends Component {
   
     render() {
       return (
-        <View>
-        <MyHeader drawerOpen={() => this.props.navigation.openDrawer()}/>
-        <Text>MyGroupScreen</Text>
-        <Button
-          onPress={() => this.props.navigation.navigate('Home')}
-          title="Go back home"
-        />
-        <GroupCard></GroupCard>
-        <Text>{this.state.className}</Text>
+        <View style={{flex: 1}}>
+            <MyHeader drawerOpen={() => this.props.navigation.openDrawer()}/>
+          <View style={{width:"100%", height: "100%", alignItems: "center"}}>
+            {/* //style={{alignItems: "center"}}> */}
+            <GroupCard></GroupCard>
+            <Text>{this.state.className}</Text>
+          </View>
         </View>
       );
     }
