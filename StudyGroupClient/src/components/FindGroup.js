@@ -18,7 +18,7 @@ class FindGroupScreen extends Component {
    }
    // Use the URL for showing the groups according to this class Name.
    componentDidMount = () => {
-      fetch('https://jsonplaceholder.typicode.com/posts/2', {
+      fetch('http://ec2-18-222-34-199.us-east-2.compute.amazonaws.com:3000/api/findGroupsWithClassName?className=CSE210', {
          method: 'GET'
       })
       .then((response) => response.json())
@@ -41,6 +41,7 @@ class FindGroupScreen extends Component {
           onPress={() => this.props.navigation.navigate('Home')}
           title="Go back home"
         />
+        // Show the current groups already formed for the current class
         <Text>{this.state.data.body}</Text>
         </View>
       );

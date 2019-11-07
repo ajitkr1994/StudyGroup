@@ -18,7 +18,7 @@ class MyGroupScreen extends Component {
    }
     // Use the URL for showing the current groups of this user.
    componentDidMount = () => {
-      fetch('https://jsonplaceholder.typicode.com/posts/3', {
+      fetch('http://ec2-18-222-34-199.us-east-2.compute.amazonaws.com:3000/api/userJoinedGroups?email=bill@ucsd.edu', {
          method: 'GET'
       })
       .then((response) => response.json())
