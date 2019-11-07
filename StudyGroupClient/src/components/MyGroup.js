@@ -14,18 +14,17 @@ class MyGroupScreen extends Component {
     };
 
     state = {
-      data: ''
+      className : ''
    }
     // Use the URL for showing the current groups of this user.
    componentDidMount = () => {
-      fetch('http://ec2-18-222-34-199.us-east-2.compute.amazonaws.com:3000/api/userJoinedGroups?email=bill@ucsd.edu', {
+      fetch('http://ec2-52-53-241-171.us-west-1.compute.amazonaws.com:3000/api/userJoinedGroups?email=bill@ucsd.edu', {
          method: 'GET'
       })
       .then((response) => response.json())
       .then((responseJson) => {
-         console.log(responseJson);
          this.setState({
-            data: responseJson
+            className : responseJson[0].class
          })
       })
       .catch((error) => {
@@ -41,7 +40,7 @@ class MyGroupScreen extends Component {
           onPress={() => this.props.navigation.navigate('Home')}
           title="Go back home"
         />
-        <Text>{this.state.data.body}</Text>
+        <Text>{this.state.className}</Text>
         </View>
       );
     }
