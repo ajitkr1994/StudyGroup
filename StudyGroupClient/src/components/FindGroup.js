@@ -14,7 +14,7 @@ class FindGroupScreen extends Component {
     };
   
       state = {
-      group1_id: ''
+      group1_start_time: ''
    }
    // Use the URL for showing the groups according to this class Name.
    componentDidMount = () => {
@@ -25,15 +25,16 @@ class FindGroupScreen extends Component {
       .then((responseJson) => {
          console.log(responseJson);
          this.setState({
-            group1_id: responseJson[0]._id
+            group1_start_time: responseJson[0].startTime
+
          })
+         console.log(this.state.group1_start_time);
       })
       .catch((error) => {
          console.error(error);
       });
    }
-
-    render() {
+      render() {
       return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>FindGroupScreen</Text>
@@ -41,8 +42,7 @@ class FindGroupScreen extends Component {
           onPress={() => this.props.navigation.navigate('Home')}
           title="Go back home"
         />
-        // Show the current groups already formed for the current class
-        //<Text>{this.state.group1_id}</Text>
+        <Text>Start Time = {this.state.group1_start_time}</Text>
         </View>
       );
     }
