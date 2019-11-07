@@ -37,7 +37,7 @@ class MyGroupScreen extends Component {
     render() {
       return (
         <View style={{flex: 1}}>
-            <MyHeader drawerOpen={() => this.props.navigation.openDrawer()}/>
+            <MyHeader title = 'My Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
           <View style={{width:"100%", height: "100%", alignItems: "center"}}>
             {/* //style={{alignItems: "center"}}> */}
             <GroupCard></GroupCard>
