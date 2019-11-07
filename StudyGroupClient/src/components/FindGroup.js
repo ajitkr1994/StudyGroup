@@ -38,7 +38,7 @@ class FindGroupScreen extends Component {
       render() {
       return (
         <View>
-          <MyHeader drawerOpen={() => this.props.navigation.openDrawer()}/>
+          <MyHeader title = 'Find Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
 
         <Text>FindGroupScreen</Text>
         <Button

@@ -37,7 +37,7 @@ class MyGroupScreen extends Component {
     render() {
       return (
         <View>
-        <MyHeader drawerOpen={() => this.props.navigation.openDrawer()}/>
+        <MyHeader title = 'My Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
         <Text>MyGroupScreen</Text>
         <Button
           onPress={() => this.props.navigation.navigate('Home')}
