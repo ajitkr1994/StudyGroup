@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, Button} from 'react-native';
-import { Header, Body, Title, Left, Icon, Right } from 'native-base'
+import { Text, View } from 'react-native';
+import MyHeader from './shared/MyHeader'
 
 class HomeScreen extends Component {
     static navigationOptions = {
@@ -29,15 +29,7 @@ class HomeScreen extends Component {
     render() {
       return (
       <View>
-        <Header>
-          <Left>
-            <Icon name="ios-menu" onPress={() => this.props.navigation.openDrawer()} />
-          </Left>
-          <Body>
-            <Title>Study Group</Title>
-          </Body>
-          <Right/>
-        </Header>
+        <MyHeader drawerOpen={() => this.props.navigation.openDrawer()}/>
         <Text>HomeScreen</Text>
       </View>
       )

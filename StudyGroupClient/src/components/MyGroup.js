@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, Image, Button} from 'react-native';
 import styles from '../styles/styles';
 import GroupCard from './shared/GroupCard';
+import MyHeader from './shared/MyHeader'
 
 class MyGroupScreen extends Component {
     static navigationOptions = {
@@ -35,7 +36,8 @@ class MyGroupScreen extends Component {
   
     render() {
       return (
-        <View style={{ flex: 1, flexShrink: 0, flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
+        <MyHeader drawerOpen={() => this.props.navigation.openDrawer()}/>
         <Text>MyGroupScreen</Text>
         <Button
           onPress={() => this.props.navigation.navigate('Home')}
