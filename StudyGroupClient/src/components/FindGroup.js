@@ -13,6 +13,26 @@ class FindGroupScreen extends Component {
       ),
     };
   
+      state = {
+      data: ''
+   }
+   // Use the URL for showing the groups according to this class Name.
+   componentDidMount = () => {
+      fetch('https://jsonplaceholder.typicode.com/posts/2', {
+         method: 'GET'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+         console.log(responseJson);
+         this.setState({
+            data: responseJson
+         })
+      })
+      .catch((error) => {
+         console.error(error);
+      });
+   }
+
     render() {
       return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -21,6 +41,7 @@ class FindGroupScreen extends Component {
           onPress={() => this.props.navigation.navigate('Home')}
           title="Go back home"
         />
+        <Text>{this.state.data.body}</Text>
         </View>
       );
     }

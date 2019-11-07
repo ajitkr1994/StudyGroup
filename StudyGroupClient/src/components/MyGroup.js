@@ -12,6 +12,26 @@ class MyGroupScreen extends Component {
         />
       ),
     };
+
+    state = {
+      data: ''
+   }
+    // Use the URL for showing the current groups of this user.
+   componentDidMount = () => {
+      fetch('https://jsonplaceholder.typicode.com/posts/3', {
+         method: 'GET'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+         console.log(responseJson);
+         this.setState({
+            data: responseJson
+         })
+      })
+      .catch((error) => {
+         console.error(error);
+      });
+   }
   
     render() {
       return (
@@ -21,6 +41,7 @@ class MyGroupScreen extends Component {
           onPress={() => this.props.navigation.navigate('Home')}
           title="Go back home"
         />
+        <Text>{this.state.data.body}</Text>
         </View>
       );
     }
