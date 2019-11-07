@@ -14,18 +14,18 @@ class FindGroupScreen extends Component {
     };
   
       state = {
-      data: ''
+      group1_id: ''
    }
    // Use the URL for showing the groups according to this class Name.
    componentDidMount = () => {
-      fetch('http://ec2-18-222-34-199.us-east-2.compute.amazonaws.com:3000/api/findGroupsWithClassName?className=CSE210', {
+      fetch('http://ec2-52-53-241-171.us-west-1.compute.amazonaws.com:3000/api/findGroupsWithClassName?className=CSE210', {
          method: 'GET'
       })
       .then((response) => response.json())
       .then((responseJson) => {
          console.log(responseJson);
          this.setState({
-            data: responseJson
+            group1_id: responseJson[0]._id
          })
       })
       .catch((error) => {
@@ -42,7 +42,7 @@ class FindGroupScreen extends Component {
           title="Go back home"
         />
         // Show the current groups already formed for the current class
-        <Text>{this.state.data.body}</Text>
+        //<Text>{this.state.group1_id}</Text>
         </View>
       );
     }
