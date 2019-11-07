@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, Image, Button} from 'react-native';
 import styles from '../styles/styles';
+import GroupCard from './shared/GroupCard';
 
 class MyGroupScreen extends Component {
     static navigationOptions = {
@@ -34,12 +35,13 @@ class MyGroupScreen extends Component {
   
     render() {
       return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 1, flexShrink: 0, flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>MyGroupScreen</Text>
         <Button
           onPress={() => this.props.navigation.navigate('Home')}
           title="Go back home"
         />
+        <GroupCard></GroupCard>
         <Text>{this.state.className}</Text>
         </View>
       );
