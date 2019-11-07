@@ -11,7 +11,7 @@ class MyHeader extends Component {
             <Icon name="ios-menu" onPress={() => this.props.drawerOpen()} />
           </Left>
           <Body>
-            <Title>Study Group</Title>
+            <Title>{this.props.title}</Title>
           </Body>
           <Right/>
         </Header>

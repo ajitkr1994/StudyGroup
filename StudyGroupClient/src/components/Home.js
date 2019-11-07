@@ -29,7 +29,7 @@ class HomeScreen extends Component {
     render() {
       return (
       <View>
-        <MyHeader drawerOpen={() => this.props.navigation.openDrawer()}/>
+        <MyHeader title = 'Study Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
         <Text>HomeScreen</Text>
       </View>
       )
