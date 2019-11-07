@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image} from 'react-native';
+import { Text, View, Button} from 'react-native';
 
 class HomeScreen extends Component {
     static navigationOptions = {
@@ -8,6 +8,9 @@ class HomeScreen extends Component {
     render() {
       return (      
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button
+        onPress={() => this.props.navigation.openDrawer()}
+        title="humberger"/>
       <Text>HomeScreen</Text>
       </View>)
     }
