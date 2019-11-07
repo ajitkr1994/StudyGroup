@@ -9,7 +9,19 @@ server.get('/', function (req, res) {
 
 server.get('/api/users', function (req, res) {
   //res.send('Hello World!');
+  console.log("/api/users");
   db.collection("users"). find({}).project({_id:0, name:1, email:1}).toArray(function(err, result) {
+    console.log(result);
+    res.send(result);
+  });
+});
+
+server.get('/api/findGroupsWithClassName', function (req, res) {
+  //res.send('Hello World!');
+  console.log("/api/findGroupsWithClassName");
+  className = req.query.className;
+  var query = {"class" : className};
+  db.collection("groups"). find(query).project({_id:0 }).toArray(function(err, result) {
     console.log(result);
     res.send(result);
   });
@@ -31,7 +43,11 @@ server.get('/api/userJoinedGroups', function (req, res) {
 //   console.log('Example server listening on port 3000!');
 // });
 
-const dburl = 'mongodb+srv://dbAdmin:uswPToctVp44S5aO@cluster0-yy2cw.mongodb.net/test?retryWrites=true&w=majority'
+//const dburl = 'mongodb+srv://ajit:ajit@cluster0-yy2cw.mongodb.net/test?retryWrites=true&w=majority'
+
+
+// My DB
+const dburl = 'mongodb+srv://admin:admin@cluster0-rrfey.mongodb.net/test?retryWrites=true&w=majority'
 const dbclient = new MongoClient(dburl, { useUnifiedTopology: true });
 dbclient.connect( (err, client) => {
   if (err) return console.log(err)
@@ -41,3 +57,6 @@ dbclient.connect( (err, client) => {
     console.log('Database connected!')
   })
 })
+
+// Close the connection
+dbclient.close();

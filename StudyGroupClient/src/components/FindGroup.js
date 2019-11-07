@@ -13,7 +13,28 @@ class FindGroupScreen extends Component {
       ),
     };
   
-    render() {
+      state = {
+      group1_start_time: ''
+   }
+   // Use the URL for showing the groups according to this class Name.
+   componentDidMount = () => {
+      fetch('http://ec2-52-53-241-171.us-west-1.compute.amazonaws.com:3000/api/findGroupsWithClassName?className=CSE210', {
+         method: 'GET'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+         console.log(responseJson);
+         this.setState({
+            group1_start_time: responseJson[0].startTime
+
+         })
+         console.log(this.state.group1_start_time);
+      })
+      .catch((error) => {
+         console.error(error);
+      });
+   }
+      render() {
       return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>FindGroupScreen</Text>
@@ -21,6 +42,7 @@ class FindGroupScreen extends Component {
           onPress={() => this.props.navigation.navigate('Home')}
           title="Go back home"
         />
+        <Text>Start Time = {this.state.group1_start_time}</Text>
         </View>
       );
     }
