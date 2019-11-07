@@ -3,15 +3,21 @@ import { StyleSheet } from 'react-native'
 import { Container, Header, Content, Card, CardItem, Text, Body } from "native-base";
 export default class GroupCard extends Component {
   render() {
+    let names = [];
+    for (let i=0; i<this.props.content.length; i++) {
+        names.push(<Text>{this.props.content[i]}</Text>);
+        // todo key
+    }
     return (
       <Container style={styles.container}>
         <Content padder>
           <Card>
             <CardItem header bordered style={styles.header}>
-              <Text style={styles.title}>NativeBase</Text>
+              <Text style={styles.title}>{this.props.className}</Text>
             </CardItem>
             <CardItem bordered>
               <Body>
+                  {names}
                 <Text>
                   NativeBase is a free and open source framework that enable
                   developers to build
