@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
-import MyHeader from './shared/MyHeader'
+import { StyleSheet, Text, View } from 'react-native';
+import MyHeader from './shared/MyHeader';
+
+styles = StyleSheet.create({
+      bigBlue: {
+      color: 'orange',
+      fontWeight: 'bold',
+      fontSize: 30,
+      },
+    });
 
 class HomeScreen extends Component {
     static navigationOptions = {
@@ -30,7 +38,7 @@ class HomeScreen extends Component {
       return (
       <View>
         <MyHeader title = 'Study Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
-        <Text>HomeScreen</Text>
+        <Text style={styles.bigBlue}>Welcome, Alice!</Text>
       </View>
       )
     }
