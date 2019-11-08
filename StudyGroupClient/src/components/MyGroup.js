@@ -9,8 +9,8 @@ class MyGroupScreen extends Component {
       drawerLabel: 'MyGroupScreen',
       drawerIcon: ({ tintColor }) => (
         <Image
-          // source={require('./notif-icon.png')}
-          style={[styles.icon, { tintColor: tintColor }]}
+          source={require('../img/mygroup.png')}
+          style={[styles.icon]}
         />
       ),
     };

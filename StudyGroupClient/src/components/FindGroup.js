@@ -6,10 +6,10 @@ import MyHeader from './shared/MyHeader'
 class FindGroupScreen extends Component {
     static navigationOptions = {
       drawerLabel: 'FindGroupScreen',
-      drawerIcon: ({ tintColor }) => (
+      drawerIcon: () => (
         <Image
-          // source={require('./notif-icon.png')}
-          style={[styles.icon, { tintColor: tintColor }]}
+          source={require('../img/findgroup.png')}
+          style={[styles.icon]}
         />
       ),
     };
