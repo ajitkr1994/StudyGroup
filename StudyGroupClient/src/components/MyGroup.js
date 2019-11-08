@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, Image, Button} from 'react-native';
+import { Text, View, ScrollView, SafeAreaView, Image, Button} from 'react-native';
 import styles from '../styles/styles';
 import GroupCard from './shared/GroupCard';
 import MyHeader from './shared/MyHeader'
-
+import { Container, Content } from "native-base";
 class MyGroupScreen extends Component {
     static navigationOptions = {
       drawerLabel: 'MyGroupScreen',
@@ -21,7 +21,7 @@ class MyGroupScreen extends Component {
 
     // Use the URL for showing the current groups of this user.
     componentDidMount = () => {
-        fetch('http://ec2-52-53-241-171.us-west-1.compute.amazonaws.com:3000/api/userJoinedGroups?email=bill@ucsd.edu', {
+        fetch('http://ec2-52-53-241-171.us-west-1.compute.amazonaws.com:3000/api/userJoinedGroups?email=alice@ucsd.edu', {
           method: 'GET'
         })
         .then((response) => response.json())
@@ -29,6 +29,8 @@ class MyGroupScreen extends Component {
           this.setState({
               groups : [...responseJson]
           });
+          console.log(this.state.groups)
+          console.log(this.state.groups[0].members)
           this.refreshGroupCards();
         })
         .catch((error) => {
@@ -36,10 +38,22 @@ class MyGroupScreen extends Component {
         });
     }
 
+    formatContent(startTime, endTime, members) {
+      let content = "";
+      content += "Time: "+startTime+"-"+endTime;
+      for (let i=0; i< members.length; i++) {
+        content += "\n" + members[i].name||""
+      }
+      console.log(content)
+      return content;
+    }
+
     refreshGroupCards() {
       const cards = [];
       for (let i=0; i < this.state.groups.length; i++) {
-          cards.push(<Text>{this.state.groups[i].class}</Text>) 
+          cards.push(
+            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].class} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members)}/>
+          ); 
           // todo key
       }
       return cards;
@@ -48,12 +62,17 @@ class MyGroupScreen extends Component {
     render() {
       return (
         <View style={{flex: 1}}>
+          <View>
             <MyHeader title = 'My Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
-          <View style={{width:"100%", height: "100%", alignItems: "center"}}>
-            {this.refreshGroupCards()}
-            {/* //style={{alignItems: "center"}}> */}
-            <GroupCard className="hi" content={["hello"]}></GroupCard>
-            <Text>{this.state.className}</Text>
+          </View>
+          <View style={{flex: 1, alignItems: "center"}}>
+            <ScrollView style={{width:"90%"}}>
+              <Container>
+                <Content padder>
+                  {this.refreshGroupCards()}
+                </Content>
+              </Container>
+            </ScrollView>
           </View>
         </View>
       );
