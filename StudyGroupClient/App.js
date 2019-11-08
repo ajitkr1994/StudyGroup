@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
   drawerImage: {
     height: 150,
     width: 150,
-    borderRadius: 75
+    borderRadius: 75,
+    resizeMode: 'contain'
   }
 
 })
