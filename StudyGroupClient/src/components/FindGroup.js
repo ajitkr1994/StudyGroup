@@ -75,7 +75,7 @@ class FindGroupScreen extends Component {
           <View>
             <MyHeader title = 'Find Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
           </View>
-          <View style={{flex: 1}}>
+          <View>
             <SearchBar ref="searchBar" placeholder="Search" onSearchButtonPress={(search) => {this.fetchData(search);}} value={search} />
           </View>
           <View style={{flex: 1, alignItems: "center"}}>
