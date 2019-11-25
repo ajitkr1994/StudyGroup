@@ -6,7 +6,8 @@ import MyHeader from './shared/MyHeader'
 import { Container, Content } from "native-base";
 class MyGroupScreen extends Component {
     static navigationOptions = {
-      drawerLabel: 'MyGroupScreen',
+      title: 'My Group',
+      drawerLabel: 'My Group',
       drawerIcon: ({ tintColor }) => (
         <Image
           source={require('../img/mygroup.png')}

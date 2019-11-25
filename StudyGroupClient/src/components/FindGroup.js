@@ -8,7 +8,8 @@ import SearchBar from 'react-native-search-bar';
 
 class FindGroupScreen extends Component {
     static navigationOptions = {
-      drawerLabel: 'FindGroupScreen',
+      title:'Find Group',
+      drawerLabel: 'Find Group',
       drawerIcon: () => (
         <Image
           source={require('../img/findgroup.png')}
