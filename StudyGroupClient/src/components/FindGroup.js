@@ -23,15 +23,46 @@ class FindGroupScreen extends Component {
       search: ''
     }
 
-  formatContent(startTime, endTime, members) {
-    let content = "";
-    content += "Time: "+startTime+"-"+endTime;
-    for (let i=0; i< members.length; i++) {
-      content += "\n" + members[i].name||""
+  findDate(dateTime)
+    {
+      var date = String(dateTime).split('T');
+      return date[0];
     }
-    console.log(content)
-    return content;
-  }
+
+    findTime(dateTime)
+    {
+      var time = String(dateTime).split('T');
+      var hour = parseInt(time[1].split(':')[0]);
+
+      var res = "";
+
+      if (hour <11)
+        res = String(hour) + "AM";
+      else if (hour == 12)
+        res = String(hour) + "PM";
+      else
+        res = String(hour-12) + "PM";
+
+      return res;
+    }
+
+    formatContent(startTime, endTime, members) {
+      let content = "";
+
+      content += "Date: " + this.findDate(startTime) + "\n";
+      
+      content += "Time: "; //+startTime+"-"+endTime;
+
+      content += this.findTime(startTime) + "-" + this.findTime(endTime) + "\n";
+      content += "Members:"
+      
+
+      for (let i=0; i< members.length; i++) {
+        content += "\n" + members[i].name||""
+      }
+      console.log(content)
+      return content;
+    }
 
   refreshGroupCards() {
     const cards = [];

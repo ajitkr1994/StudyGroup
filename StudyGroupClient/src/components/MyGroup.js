@@ -39,9 +39,40 @@ class MyGroupScreen extends Component {
         });
     }
 
+    findDate(dateTime)
+    {
+      var date = String(dateTime).split('T');
+      return date[0];
+    }
+
+    findTime(dateTime)
+    {
+      var time = String(dateTime).split('T');
+      var hour = parseInt(time[1].split(':')[0]);
+
+      var res = "";
+
+      if (hour <11)
+        res = String(hour) + "AM";
+      else if (hour == 12)
+        res = String(hour) + "PM";
+      else
+        res = String(hour-12) + "PM";
+
+      return res;
+    }
+
     formatContent(startTime, endTime, members) {
       let content = "";
-      content += "Time: "+startTime+"-"+endTime;
+
+      content += "Date: " + this.findDate(startTime) + "\n";
+      
+      content += "Time: "; //+startTime+"-"+endTime;
+
+      content += this.findTime(startTime) + "-" + this.findTime(endTime) + "\n";
+      content += "Members:"
+      
+
       for (let i=0; i< members.length; i++) {
         content += "\n" + members[i].name||""
       }
