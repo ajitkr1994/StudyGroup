@@ -14,6 +14,7 @@ then
 mongo "mongodb+srv://cluster0-xnpoq.mongodb.net/test"  --username admin  ./StudyGroupServer/scripts/prepopulatedata.js
 
 Now to run the server:
-First export url mongo db URL:...
+First edit DBURL in .env
+"mongodb+srv://username:password@cluster0-xnpoq.mongodb.net/test"
 npm install
 npm run serve
