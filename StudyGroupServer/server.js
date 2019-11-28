@@ -46,7 +46,7 @@ console.log(dburl);
 const dbclient = new MongoClient(dburl, { useUnifiedTopology: true });
 dbclient.connect( (err, client) => {
   if (err) return console.log(err)
-  db = client.db("test") // database name
+  db = client.db() // database name, note the name is already in url, /test
   server.listen(3000, () => {
     console.log('listening on 3000')
     console.log('Database connected!')

@@ -5,7 +5,7 @@ Here is an example connecting via the CLI to my cluster with my username admin.
 Switch the url to your cluster either locally or on the cloud.
 mongo "mongodb+srv://cluster0-xnpoq.mongodb.net/test"  --username admin 
 
-Now we will prepopulate the data. Replace admin and url with your username and url.
+Now we will prepopulate the data. Replace admin and url with your username and url. Notice that this puts all the data in test db, hence the "/test".
 mongo "mongodb+srv://cluster0-xnpoq.mongodb.net/test"  --username admin  ./StudyGroupServer/scripts/prepopulatedata.js
 
 To reinitialize the database in any case:
