@@ -5,7 +5,7 @@ const app = require('../server')
  * Example how to test api.
  */
 describe('Post Endpoints', () => {
-  it('should get', async () => {
+  it('should get', async (done) => {
     const res = await request(app)
       .get('/api/users');
     //   .send({
@@ -13,5 +13,6 @@ describe('Post Endpoints', () => {
     //     title: 'test is cool',
     //   })
     expect(res.statusCode).toEqual(200)
+    done();
   })
 })
