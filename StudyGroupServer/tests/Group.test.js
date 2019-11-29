@@ -1,5 +1,8 @@
 const {MongoClient} = require('mongodb');
-
+/**
+ * Shows how to test only db, so far we use this just to make sure our
+ * test db (mongodb in memory works).
+ */
 describe('insert', () => {
   let connection;
   let db;
