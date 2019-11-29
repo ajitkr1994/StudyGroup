@@ -7,6 +7,7 @@ var Alice = {
     _id:1,
     name  : "Alice",
     email : "alice@ucsd.edu",
+    password: "alice",
     joinedGroups: []
 };
 
@@ -14,6 +15,7 @@ var Bill = {
     _id:2,
     name  : "Bill",
     email : "bill@ucsd.edu",
+    password: "bill",
     joinedGroups: []
 };
 
@@ -21,6 +23,7 @@ var Carol = {
     _id:3,
     name  : "Carol",
     email : "carol@ucsd.edu",
+    password: "carol",
     joinedGroups: []
 };
 
