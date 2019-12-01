@@ -2,10 +2,10 @@ const request = require('supertest')
 const app = require('../server')
 const { MongoClient } = require('mongodb');
 
-const date1 = new Date("2019-11-26T14:12:00Z")
-const date2 = new Date("2019-11-26T16:12:00Z")
-const date3 = new Date("2019-11-26T18:12:00Z")
-const date4 = new Date("2019-11-26T20:12:00Z")
+const date1 = new Date("2019-11-26T14:12:00Z");
+const date2 = new Date("2019-11-26T16:12:00Z");
+const date3 = new Date("2019-11-26T18:12:00Z");
+const date4 = new Date("2019-11-26T20:12:00Z");
 
 describe('Search Groups', () => {
     let connection;
@@ -19,15 +19,15 @@ describe('Search Groups', () => {
     /**
      * Insert test data.
      */
-    beforeAll(async () => {
+    beforeAll(async (done) => {
         connection = await MongoClient.connect(global.__MONGO_URI__, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
         db = await connection.db(global.__MONGO_DB_NAME__);
 
-        const users = db.collection('users');
-        const groups = db.collection('groups');
+        const users = await db.collection('users');
+        const groups = await db.collection('groups');
 
         Alice = {
             _id: 1,
@@ -75,6 +75,10 @@ describe('Search Groups', () => {
         Alice.joinedGroups = [Group1._id];
         Bill.joinedGroups = [Group1._id];
         Carol.joinedGroups = [Group2._id];
+
+        // Make email unique
+        await db.collection('users').createIndex( { "email" : 1 }, { unique : true } );
+
         await users.insertOne(Alice);
         await users.insertOne(Bill);
         await users.insertOne(Carol);
@@ -88,26 +92,27 @@ describe('Search Groups', () => {
         expect(insertedAlice).toEqual(Alice);
         expect(insertedBill).toEqual(Bill);
         expect(insertedCarol).toEqual(Carol);
+        done();
     });
 
     /**
      * Clear test data
      */
-    afterAll(async () => {
-        const users = db.collection('users');
-        const groups = db.collection('groups');
+    afterAll(async (done) => {
+        const users = await db.collection('users');
+        const groups = await db.collection('groups');
         await users.deleteMany({});
         await groups.deleteMany({});
         await connection.close();
-        await db.close();
+        done();
     });
 
-    it('should search cse210 and get back CSE210 Groups', async () => {
+    it('should search cse210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-        .get('/api/findGroupsWithClassName?className=cse210');
+            .get('/api/findGroupsWithClassName?className=cse210');
         console.log(res.body)
 
-      expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(200)
         expect(res.body[0]._id).toEqual(Group1._id);
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
@@ -116,14 +121,15 @@ describe('Search Groups', () => {
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
         expect(res.body[1].members[0].email).toEqual(Carol.email);
+        done();
     });
 
-    it('should search cse 210 and get back CSE210 Groups', async () => {
+    it('should search cse 210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-        .get('/api/findGroupsWithClassName?className=cse%20210');
+            .get('/api/findGroupsWithClassName?className=cse%20210');
         console.log(res.body)
 
-      expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(200)
         expect(res.body[0]._id).toEqual(Group1._id);
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
@@ -132,14 +138,15 @@ describe('Search Groups', () => {
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
         expect(res.body[1].members[0].email).toEqual(Carol.email);
+        done();
     });
 
-    it('should search CSE 210 and get back CSE210 Groups', async () => {
+    it('should search CSE 210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-        .get('/api/findGroupsWithClassName?className=CSE%20210');
+            .get('/api/findGroupsWithClassName?className=CSE%20210');
         console.log(res.body)
 
-      expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(200)
         expect(res.body[0]._id).toEqual(Group1._id);
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
@@ -148,14 +155,15 @@ describe('Search Groups', () => {
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
         expect(res.body[1].members[0].email).toEqual(Carol.email);
+        done();
     });
 
-    it('should search CSE210 and get back CSE210 Groups', async () => {
+    it('should search CSE210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-        .get('/api/findGroupsWithClassName?className=CSE210');
+            .get('/api/findGroupsWithClassName?className=CSE210');
         console.log(res.body)
 
-      expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(200)
         expect(res.body[0]._id).toEqual(Group1._id);
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
@@ -164,14 +172,15 @@ describe('Search Groups', () => {
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
         expect(res.body[1].members[0].email).toEqual(Carol.email);
+        done();
     });
 
-    it('should search CsE 210 and get back CSE210 Groups', async () => {
+    it('should search CsE 210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-        .get('/api/findGroupsWithClassName?className=CsE%20210');
+            .get('/api/findGroupsWithClassName?className=CsE%20210');
         console.log(res.body)
 
-      expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(200)
         expect(res.body[0]._id).toEqual(Group1._id);
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
@@ -180,14 +189,15 @@ describe('Search Groups', () => {
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
         expect(res.body[1].members[0].email).toEqual(Carol.email);
+        done();
     });
 
-    it('should search CsE210 and get back CSE210 Groups', async () => {
+    it('should search CsE210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-        .get('/api/findGroupsWithClassName?className=CsE210');
+            .get('/api/findGroupsWithClassName?className=CsE210');
         console.log(res.body)
 
-      expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(200)
         expect(res.body[0]._id).toEqual(Group1._id);
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
@@ -196,6 +206,7 @@ describe('Search Groups', () => {
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
         expect(res.body[1].members[0].email).toEqual(Carol.email);
+        done();
     });
 });
 
@@ -211,14 +222,14 @@ describe('Search Groups Responds with Ordered Array', () => {
     /**
      * Insert test data.
      */
-    beforeAll(async () => {
+    beforeAll(async (done) => {
         connection = await MongoClient.connect(global.__MONGO_URI__, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
         db = await connection.db(global.__MONGO_DB_NAME__);
 
-        const groups = db.collection('groups');
+        const groups = await db.collection('groups');
 
         /**
          * Make first group we add newer than second, other way around tested above.
@@ -241,28 +252,30 @@ describe('Search Groups Responds with Ordered Array', () => {
 
         await groups.insertOne(Group1);
         await groups.insertOne(Group2);
+        done();
     });
 
     /**
      * Clear test data
      */
-    afterAll(async () => {
-        const groups = db.collection('groups');
+    afterAll(async (done) => {
+        const groups = await db.collection('groups');
         await groups.deleteMany({});
         await connection.close();
-        await db.close();
+        done();
     });
 
-    it('should search cse210 and get back CSE210 Groups ordered by start date', async () => {
+    it('should search cse210 and get back CSE210 Groups ordered by start date', async (done) => {
         const res = await request(app)
-        .get('/api/findGroupsWithClassName?className=cse210');
+            .get('/api/findGroupsWithClassName?className=cse210');
         console.log(res.body)
 
-      expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(200)
         expect(res.body[0]._id).toEqual(Group2._id);
         expect(res.body[0].class).toEqual(Group2.class);
 
         expect(res.body[1]._id).toEqual(Group1._id);
         expect(res.body[1].class).toEqual(Group1.class);
+        done();
     });
 });
