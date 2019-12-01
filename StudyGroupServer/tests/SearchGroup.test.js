@@ -198,3 +198,71 @@ describe('Search Groups', () => {
         expect(res.body[1].members[0].email).toEqual(Carol.email);
     });
 });
+
+
+
+
+describe('Search Groups Responds with Ordered Array', () => {
+    let connection;
+    let db;
+    let Group1;
+    let Group2;
+
+    /**
+     * Insert test data.
+     */
+    beforeAll(async () => {
+        connection = await MongoClient.connect(global.__MONGO_URI__, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        db = await connection.db(global.__MONGO_DB_NAME__);
+
+        const groups = db.collection('groups');
+
+        /**
+         * Make first group we add newer than second, other way around tested above.
+         */
+        Group1 = {
+            _id: 1,
+            class: "CSE210",
+            startTime: date3,
+            endTime: date4,
+            members: []
+        }
+
+        Group2 = {
+            _id: 2,
+            class: "CSE210",
+            startTime: date1,
+            endTime: date2,
+            members: []
+        }
+
+        await groups.insertOne(Group1);
+        await groups.insertOne(Group2);
+    });
+
+    /**
+     * Clear test data
+     */
+    afterAll(async () => {
+        const groups = db.collection('groups');
+        await groups.deleteMany({});
+        await connection.close();
+        await db.close();
+    });
+
+    it('should search cse210 and get back CSE210 Groups ordered by start date', async () => {
+        const res = await request(app)
+        .get('/api/findGroupsWithClassName?className=cse210');
+        console.log(res.body)
+
+      expect(res.statusCode).toEqual(200)
+        expect(res.body[0]._id).toEqual(Group2._id);
+        expect(res.body[0].class).toEqual(Group2.class);
+
+        expect(res.body[1]._id).toEqual(Group1._id);
+        expect(res.body[1].class).toEqual(Group1.class);
+    });
+});

@@ -50,7 +50,8 @@ server.get('/api/findGroupsWithClassName', async function (req, res) {
         "members.name": 1,
         "members.email": 1
       }
-    }
+    },
+    { $sort: { startTime: 1 } },
   ]).toArray(function (err, result) {
     console.log(result);
     res.send(result);
@@ -84,7 +85,8 @@ server.get('/api/userJoinedGroups', async function (req, res) {
           "members.name": 1,
           "members.email": 1
         }
-      }
+      },
+      { $sort: { startTime: 1 } },
     ]).toArray(function (err, result) {
       console.log(result);
       res.send(result);
