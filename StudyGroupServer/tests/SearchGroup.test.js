@@ -7,6 +7,8 @@ const date2 = new Date("2019-11-26T16:12:00Z");
 const date3 = new Date("2019-11-26T18:12:00Z");
 const date4 = new Date("2019-11-26T20:12:00Z");
 
+let token;
+
 describe('Search Groups', () => {
     let connection;
     let db;
@@ -92,6 +94,17 @@ describe('Search Groups', () => {
         expect(insertedAlice).toEqual(Alice);
         expect(insertedBill).toEqual(Bill);
         expect(insertedCarol).toEqual(Carol);
+
+        // LOGIN TO SET TOKEN
+        const res = await request(app)
+            .post('/api/login')
+            .send({
+                email: 'alice@ucsd.edu',
+                password: 'alice'
+            });
+
+        expect(res.statusCode).toEqual(200);
+        token = res.text;
         done();
     });
 
@@ -109,7 +122,8 @@ describe('Search Groups', () => {
 
     it('should search cse210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-            .get('/api/findGroupsWithClassName?className=cse210');
+            .get('/api/findGroupsWithClassName?className=cse210')
+            .set('Authorization', 'Bearer ' + token);
         console.log(res.body)
 
         expect(res.statusCode).toEqual(200)
@@ -126,7 +140,8 @@ describe('Search Groups', () => {
 
     it('should search cse 210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-            .get('/api/findGroupsWithClassName?className=cse%20210');
+            .get('/api/findGroupsWithClassName?className=cse%20210')
+            .set('Authorization', 'Bearer ' + token);
         console.log(res.body)
 
         expect(res.statusCode).toEqual(200)
@@ -143,7 +158,8 @@ describe('Search Groups', () => {
 
     it('should search CSE 210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-            .get('/api/findGroupsWithClassName?className=CSE%20210');
+            .get('/api/findGroupsWithClassName?className=CSE%20210')
+            .set('Authorization', 'Bearer ' + token);
         console.log(res.body)
 
         expect(res.statusCode).toEqual(200)
@@ -160,7 +176,8 @@ describe('Search Groups', () => {
 
     it('should search CSE210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-            .get('/api/findGroupsWithClassName?className=CSE210');
+            .get('/api/findGroupsWithClassName?className=CSE210')
+            .set('Authorization', 'Bearer ' + token);
         console.log(res.body)
 
         expect(res.statusCode).toEqual(200)
@@ -177,7 +194,8 @@ describe('Search Groups', () => {
 
     it('should search CsE 210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-            .get('/api/findGroupsWithClassName?className=CsE%20210');
+            .get('/api/findGroupsWithClassName?className=CsE%20210')
+            .set('Authorization', 'Bearer ' + token);
         console.log(res.body)
 
         expect(res.statusCode).toEqual(200)
@@ -194,7 +212,8 @@ describe('Search Groups', () => {
 
     it('should search CsE210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
-            .get('/api/findGroupsWithClassName?className=CsE210');
+            .get('/api/findGroupsWithClassName?className=CsE210')
+            .set('Authorization', 'Bearer ' + token);
         console.log(res.body)
 
         expect(res.statusCode).toEqual(200)
@@ -267,7 +286,8 @@ describe('Search Groups Responds with Ordered Array', () => {
 
     it('should search cse210 and get back CSE210 Groups ordered by start date', async (done) => {
         const res = await request(app)
-            .get('/api/findGroupsWithClassName?className=cse210');
+            .get('/api/findGroupsWithClassName?className=cse210')
+            .set('Authorization', 'Bearer ' + token);
         console.log(res.body)
 
         expect(res.statusCode).toEqual(200)

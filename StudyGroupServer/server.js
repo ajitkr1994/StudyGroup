@@ -1,6 +1,9 @@
 var express = require('express');
-var server = express();
 var bodyParser = require("body-parser");
+var ejwt = require('express-jwt');
+var jwt = require('jsonwebtoken');
+
+var server = express();
 var getDB = require('./db');
 
 server.use(bodyParser.urlencoded({ extended: false }));
@@ -8,6 +11,32 @@ server.use(bodyParser.json());
 
 server.get('/', function (req, res) {
   res.send('Hello World!');
+});
+
+server.use(ejwt({ secret: 'pxWDLMMWeBu55CARfRxZZJgZHaCYZ4a6'}).unless({path: ['/api/login', '/api/user/signup']}));
+server.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('invalid token...');
+  }
+});
+
+server.post('/api/login', async function (req, res) {
+  console.log("/api/login");
+  var db = await getDB();
+  if (!req.body.email || !req.body.password) {
+    res.status(400).send('Invalid Form');
+  } else {
+    const user = await db.collection("users").findOne({email: req.body.email});
+    if (!user) return res.status(401).send('Unauthorized.')
+    else {
+      if (req.body.password != user.password) {
+        return res.status(401).send('Unauthorized.')
+      } else {
+        const token = jwt.sign({_id: user._id}, 'pxWDLMMWeBu55CARfRxZZJgZHaCYZ4a6');
+        return res.status(200).send(token);
+      }   
+    }
+  }
 });
 
 server.get('/api/users', async function (req, res) {
@@ -65,6 +94,9 @@ server.get('/api/findGroupsWithClassName', async function (req, res) {
   });
 });
 
+
+// TODO: This should use req.user.sub instead of req.query.email, req.user.sub
+// will give the _id of the user the jwt is signed for.
 server.get('/api/userJoinedGroups', async function (req, res) {
   var db = await getDB();
   email = req.query.email;
@@ -124,6 +156,14 @@ server.post('/api/user/signup', async function (req, res) {
   } catch(err) {
     console.log(err);
     res.status(500).send("DB error");
+  }
+});
+
+// Error catcher
+server.use(function (err, req, res, next) {
+  if (err) {
+    console.log(err);
+    res.status(500).send('Server Error');
   }
 });
 
