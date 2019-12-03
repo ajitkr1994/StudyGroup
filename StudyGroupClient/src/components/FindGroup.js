@@ -81,7 +81,7 @@ class FindGroupScreen extends Component {
 
   // Use the URL for showing the groups according to the class name that was searched (e.g. submit 'CSE210' in search bar)
   fetchData(search) {
-    const url = 'http://ec2-52-53-241-171.us-west-1.compute.amazonaws.com:3000/api/findGroupsWithClassName?className=';
+    const url = 'http://18.222.34.199:3000/api/findGroupsWithClassName?className=';
     fetch(url + search, {
       method: 'GET'
     })
