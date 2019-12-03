@@ -181,7 +181,7 @@ describe('Search Groups', () => {
 
     it('alice leaving an unknown group has no affect', async (done) => {
         const res = await request(app)
-            .get('/api/leaveGroup?groupId=1')
+            .get('/api/leaveGroup?groupId=3')
             .set('Authorization', 'Bearer ' + token);
 
         expect(res.statusCode).toEqual(200)
