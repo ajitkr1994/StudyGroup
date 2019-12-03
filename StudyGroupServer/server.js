@@ -58,7 +58,7 @@ server.get('/api/findGroupsWithClassName', async function (req, res) {
         "members.email": 1
       }
     },
-    { $sort: { startTime: 1, name: -1 } },
+    { $sort: { 'startTime': 1, 'members.name': 1 } },
   ]).toArray(function (err, result) {
     console.log(result);
     res.send(result);
