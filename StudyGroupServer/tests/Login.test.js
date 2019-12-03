@@ -148,15 +148,5 @@ describe('Sign up', () => {
         expect(res.statusCode).toEqual(200);
         done();
     });
-
-    it('cannot leave group without token', async (done) => {
-        const res = await request(app)
-            .get('/api/leaveGroup?groupId=1')
-
-        expect(res.statusCode).toEqual(401);
-        expect(res.text).toEqual('invalid token...');
-        done();
-    });
-    
 });
 
