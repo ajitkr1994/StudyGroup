@@ -56,14 +56,14 @@ server.get('/api/users', async function (req, res) {
 server.get('/api/findGroupsWithClassName', async function (req, res) {
   var db = await getDB();
   console.log("/api/findGroupsWithClassName");
-
+  if (!req.query.className) {
+    return res.status(400).send("Please enter a class name.")
+  }
   // Convert classname to capitals no space.
   var className = req.query.className;
   className = className.replace(/\s/g, '');
   className = className.toUpperCase();
-  if (!className) {
-    return res.status(400).send("Please enter a class name.")
-  }
+
 
   db.collection("groups").aggregate([
     {
@@ -100,6 +100,7 @@ server.get('/api/findGroupsWithClassName', async function (req, res) {
 server.get('/api/userJoinedGroups', async function (req, res) {
   var db = await getDB();
   email = req.query.email;
+  // TODO: catch no/bad email
   console.log("received user's email:");
   console.log(email);
   db.collection("users").findOne({ "email": email }, { "joinedGroups": 1 }, function (err, g_ids) {
@@ -140,12 +141,18 @@ server.get('/api/leaveGroup', async function (req, res) {
   console.log("received groupId:");
   console.log(groupId);
   const groupToLeaveFrom = await db.collection("groups").findOne({_id: groupId});
+  if (!groupToLeaveFrom) {
+    return res.status(400).send("Unknown Group");
+  }
   let usersInGroupWithoutThisUser = groupToLeaveFrom.members.filter( el => el !== userId);
   groupToLeaveFrom.members = usersInGroupWithoutThisUser;
   // Save group
   await db.collection("groups").update({_id: groupId}, groupToLeaveFrom);
 
   const userRemoveFromGroup = await db.collection("users").findOne({_id: userId});
+  if (!groupToLeaveFrom) {
+    return res.status(400).send("Unknown User");
+  }
   let groupsWithoutLeavingGroup = userRemoveFromGroup.joinedGroups.filter( el => el !== groupId);
   userRemoveFromGroup.joinedGroups = groupsWithoutLeavingGroup;
   // Save user

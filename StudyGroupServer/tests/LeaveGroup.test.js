@@ -184,7 +184,7 @@ describe('Search Groups', () => {
             .get('/api/leaveGroup?groupId=3')
             .set('Authorization', 'Bearer ' + token);
 
-        expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(400)
 
         // Alice should no longer be part of Group1
         const alice = await db.collection('users').findOne({_id: Alice._id});
