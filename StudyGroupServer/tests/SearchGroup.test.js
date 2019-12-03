@@ -2,10 +2,10 @@ const request = require('supertest')
 const app = require('../server')
 const { MongoClient } = require('mongodb');
 
-const date1 = new Date("2019-11-26T14:12:00Z")
-const date2 = new Date("2019-11-26T16:12:00Z")
-const date3 = new Date("2019-11-26T18:12:00Z")
-const date4 = new Date("2019-11-26T20:12:00Z")
+const date1 = new Date("2020-11-26T14:12:00Z")
+const date2 = new Date("2020-11-26T16:12:00Z")
+const date3 = new Date("2020-11-26T18:12:00Z")
+const date4 = new Date("2020-11-26T20:12:00Z")
 
 describe('Search Groups', () => {
     let connection;

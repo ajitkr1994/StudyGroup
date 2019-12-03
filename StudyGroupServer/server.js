@@ -31,7 +31,7 @@ server.get('/api/findGroupsWithClassName', async function (req, res) {
 
   db.collection("groups").aggregate([
     {
-      $match: { "class": className }
+      $match: { $and: [{"class": className}, {"endTime": {$gte: new Date()}}] }
     },
     {
       $lookup: {
@@ -66,7 +66,7 @@ server.get('/api/userJoinedGroups', async function (req, res) {
   db.collection("users").findOne({ "email": email }, { "joinedGroups": 1 }, function (err, g_ids) {
     db.collection("groups").aggregate([
       {
-        $match: { "_id": { "$in": g_ids.joinedGroups } }
+        $match: { $and: [{"_id": { "$in": g_ids.joinedGroups }}, {"endTime": {$gte: new Date()}} ] }
       },
       {
         $lookup: {
