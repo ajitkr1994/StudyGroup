@@ -50,6 +50,9 @@ Alice.joinedGroups = [Group1._id, Group2._id];
 Bill.joinedGroups = [Group1._id];
 Carol.joinedGroups = [Group2._id];
 
+// Make email unique
+db.users.createIndex( { "email" : 1 }, { unique : true } )
+
 db.users.insert(Alice);
 db.users.insert(Bill);
 db.users.insert(Carol);
