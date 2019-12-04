@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Text, View, ScrollView, SafeAreaView, Image, Button, TextInput, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import styles from '../styles/styles';
 import MyHeader from './shared/MyHeader';
-import { Container, Content } from "native-base";
 import t from 'tcomb-form-native'; // 0.6.9
 //import DateTimePicker from '@react-native-community/datetimepicker';
 

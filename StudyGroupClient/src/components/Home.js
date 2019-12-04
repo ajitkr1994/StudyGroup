@@ -20,7 +20,7 @@ class HomeScreen extends Component {
    }
     // Use the URL for showing the current groups of this user.
    componentDidMount = () => {
-      fetch('http://ec2-52-53-241-171.us-west-1.compute.amazonaws.com:3000/api/userJoinedGroups?email=bill@ucsd.edu', {
+      fetch('http://18.222.34.199:3000/api/userJoinedGroups?email=bill@ucsd.edu', {
          method: 'GET'
       })
       .then((response) => response.json())
