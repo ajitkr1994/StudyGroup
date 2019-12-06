@@ -187,6 +187,14 @@ server.post('/api/user/signup', async function (req, res) {
   }
 });
 
+/**
+ * Used by frontend to create a group (the creater will become a member).
+ * @params className: The classname the user wants to join (String)
+ *         startTime: study group start time (ISO String format, see testcase) 
+ *         endTime: study group end time (ISO String format)
+ *         //location: will be added soon (String)
+ * @returns 400 - success, or other error code
+ */
 server.post('/api/createGroup', async function (req, res) {
   var db = await getDB();
   console.log(`POST /api/createGroup with body ${req.body.toString()}`);
@@ -223,6 +231,48 @@ server.post('/api/createGroup', async function (req, res) {
       console.log('done')
       res.status(200).send("Group successfully created.")
     });
+
+  } catch(err) {
+    console.log(err);
+    res.status(500).send("DB error");
+  }
+});
+
+/**
+ * Used by frontend to join a user to certain group
+ * @params groupId: id of the group to join
+ * @returns 400 - success, or other error code
+ */
+server.post('/api/joinGroup', async function (req, res) {
+  var db = await getDB();
+  console.log(`POST /api/joinGroup with body ${req.body.toString()}`);
+  
+  const userId = parseInt(req.user._id);
+  const groupId = parseInt(req.body.groupId);
+  if (!req.body.groupId) {
+    return res.status(400).send("Invalid Form");
+  }
+
+  try {
+    //add user._id to group.members
+    const group = await db.collection("groups").findOne({_id: groupId});
+    if(group.members.includes(userId)) {
+      return res.status(200).send("already a member of this group");
+    }
+    var thisUser = [userId];
+    let membersWithThisUser = thisUser.concat(group.members);
+    group.members = membersWithThisUser;
+    await db.collection("groups").update({_id: groupId}, group)
+
+    //add groupId to user.joinedGroup
+    const user = await db.collection("users").findOne({_id: userId});
+    var thisGroup = [groupId];
+    let joinedGroupsWithThisGroup = thisGroup.concat(user.joinedGroups);
+    user.joinedGroups = joinedGroupsWithThisGroup;
+    await db.collection("users").update({_id: userId}, user)
+
+    console.log('done')
+    res.status(200).send("Joined Group successfully.")
 
   } catch(err) {
     console.log(err);
