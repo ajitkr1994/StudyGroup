@@ -35,6 +35,8 @@ describe('Create group', () => {
     afterAll(async (done) => {
         const users = db.collection('users');
         await users.deleteMany({});
+        const groups = db.collection('groups');
+        await groups.deleteMany({});
         await connection.close();
         done();
     });
