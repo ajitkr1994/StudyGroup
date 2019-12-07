@@ -83,6 +83,7 @@ server.get('/api/findGroupsWithClassName', async function (req, res) {
         "class": 1,
         "startTime": 1,
         "endTime": 1,
+        "location": 1,
         "members.name": 1,
         "members.email": 1
       }
@@ -122,6 +123,7 @@ server.get('/api/userJoinedGroups', async function (req, res) {
           "class": 1,
           "startTime": 1,
           "endTime": 1,
+          "location": 1,
           "members.name": 1,
           "members.email": 1
         }
@@ -192,7 +194,7 @@ server.post('/api/user/signup', async function (req, res) {
  * @params className: The classname the user wants to join (String)
  *         startTime: study group start time (ISO String format, see testcase) 
  *         endTime: study group end time (ISO String format)
- *         //location: will be added soon (String)
+ *         location: optional field, place for study group meeting (String)
  * @returns 400 - success, or other error code
  */
 server.post('/api/createGroup', async function (req, res) {
@@ -218,6 +220,11 @@ server.post('/api/createGroup', async function (req, res) {
     endTime: endTime,
     members: [userId]
   }
+
+  if(req.body.location) {
+    newGroup["location"] = req.body.location;
+  }
+  
   try {
     db.collection("groups").insertOne(newGroup).then(async function(r) {
 

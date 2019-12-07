@@ -58,7 +58,8 @@ describe('Search Groups', () => {
             class: "CSE210",
             startTime: date1,
             endTime: date2,
-            members: []
+            members: [],
+            location: "Geisel East, 2 Floor"
         }
 
         Group2 = {
@@ -129,6 +130,7 @@ describe('Search Groups', () => {
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
         expect(res.body[0].members[1].email).toEqual(Bill.email);
+        expect(res.body[0].location).toEqual(Group1.location);
 
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
@@ -147,6 +149,7 @@ describe('Search Groups', () => {
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
         expect(res.body[0].members[1].email).toEqual(Bill.email);
+        expect(res.body[0].location).toEqual(Group1.location);
 
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
@@ -165,6 +168,7 @@ describe('Search Groups', () => {
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
         expect(res.body[0].members[1].email).toEqual(Bill.email);
+        expect(res.body[0].location).toEqual(Group1.location);
 
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
@@ -183,6 +187,7 @@ describe('Search Groups', () => {
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
         expect(res.body[0].members[1].email).toEqual(Bill.email);
+        expect(res.body[0].location).toEqual(Group1.location);
 
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
@@ -201,6 +206,7 @@ describe('Search Groups', () => {
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
         expect(res.body[0].members[1].email).toEqual(Bill.email);
+        expect(res.body[0].location).toEqual(Group1.location);
 
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);
@@ -219,6 +225,7 @@ describe('Search Groups', () => {
         expect(res.body[0].class).toEqual(Group1.class);
         expect(res.body[0].members[0].email).toEqual(Alice.email);
         expect(res.body[0].members[1].email).toEqual(Bill.email);
+        expect(res.body[0].location).toEqual(Group1.location);
 
         expect(res.body[1]._id).toEqual(Group2._id);
         expect(res.body[1].class).toEqual(Group2.class);

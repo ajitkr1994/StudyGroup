@@ -32,7 +32,8 @@ var Group1 = {
     class : "CSE210",
     startTime: date1,
     endTime: date2,
-    members: []
+    members: [],
+    location: "Geisel East, 2 Floor"
 }
 
 var Group2 = {
