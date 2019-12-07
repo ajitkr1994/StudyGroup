@@ -96,15 +96,21 @@ server.get('/api/findGroupsWithClassName', async function (req, res) {
 });
 
 
-// TODO: This should use req.user._id instead of req.query.email, req.user._id
-// will give the _id of the user the jwt is signed for. See leave group for example
+
+/**
+ * Used by frontend to search for a user's joined groups
+ * @params email: (Optional) email of the user to search for
+ *                use req.user._id as default to search for the user themself if no email
+ * @returns Group[]: The groups that the user is in.
+ */
 server.get('/api/userJoinedGroups', async function (req, res) {
   var db = await getDB();
-  email = req.query.email;
-  // TODO: catch no/bad email
-  console.log("received user's email:");
-  console.log(email);
-  db.collection("users").findOne({ "email": email }, { "joinedGroups": 1 }, function (err, g_ids) {
+  if(req.query.email) {
+    userQuery = { "email": req.query.email };
+  } else {
+    userQuery = { "_id": parseInt(req.user._id) };
+  }
+  db.collection("users").findOne(userQuery, { "joinedGroups": 1 }, function (err, g_ids) {
     db.collection("groups").aggregate([
       {
         $match: { $and: [{"_id": { "$in": g_ids.joinedGroups }}, {"endTime": {$gte: new Date()}} ] }
@@ -195,7 +201,7 @@ server.post('/api/user/signup', async function (req, res) {
  *         startTime: study group start time (ISO String format, see testcase) 
  *         endTime: study group end time (ISO String format)
  *         location: optional field, place for study group meeting (String)
- * @returns 400 - success, or other error code
+ * @returns 200 - success, or other error code
  */
 server.post('/api/createGroup', async function (req, res) {
   var db = await getDB();
@@ -248,7 +254,7 @@ server.post('/api/createGroup', async function (req, res) {
 /**
  * Used by frontend to join a user to certain group
  * @params groupId: id of the group to join
- * @returns 400 - success, or other error code
+ * @returns 200 - success, or other error code
  */
 server.post('/api/joinGroup', async function (req, res) {
   var db = await getDB();

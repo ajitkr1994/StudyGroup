@@ -119,6 +119,49 @@ describe('Search Groups', () => {
         done();
     });
 
+    it("should search userJoinedGroups with Alice's token and get her Groups", async (done) => {
+        const res = await request(app)
+            .get('/api/userJoinedGroups')
+            .set('Authorization', 'Bearer ' + token);
+        console.log(res.body)
+
+        expect(res.statusCode).toEqual(200)
+        expect(res.body[0]._id).toEqual(Group1._id);
+        expect(res.body[0].class).toEqual(Group1.class);
+        expect(res.body[0].members[0].email).toEqual(Alice.email);
+        expect(res.body[0].members[1].email).toEqual(Bill.email);
+        expect(res.body[0].location).toEqual(Group1.location);
+        done();
+    });
+
+    it("should search userJoinedGroups with Alice's token and email and get her Groups", async (done) => {
+        const res = await request(app)
+            .get('/api/userJoinedGroups?email=alice@ucsd.edu')
+            .set('Authorization', 'Bearer ' + token);
+        console.log(res.body)
+
+        expect(res.statusCode).toEqual(200)
+        expect(res.body[0]._id).toEqual(Group1._id);
+        expect(res.body[0].class).toEqual(Group1.class);
+        expect(res.body[0].members[0].email).toEqual(Alice.email);
+        expect(res.body[0].members[1].email).toEqual(Bill.email);
+        expect(res.body[0].location).toEqual(Group1.location);
+        done();
+    });
+
+    it("should search userJoinedGroups with Alice's token and Carol's email and get Carol's Groups", async (done) => {
+        const res = await request(app)
+            .get('/api/userJoinedGroups?email=carol@ucsd.edu')
+            .set('Authorization', 'Bearer ' + token);
+        console.log(res.body)
+
+        expect(res.statusCode).toEqual(200)
+        expect(res.body[0]._id).toEqual(Group2._id);
+        expect(res.body[0].class).toEqual(Group2.class);
+        expect(res.body[0].members[0].email).toEqual(Carol.email);
+        done();
+    });
+
     it('should search cse210 and get back CSE210 Groups', async (done) => {
         const res = await request(app)
             .get('/api/findGroupsWithClassName?className=cse210')
