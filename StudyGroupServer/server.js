@@ -224,7 +224,8 @@ server.post('/api/createGroup', async function (req, res) {
     className: className,
     startTime: startTime,
     endTime: endTime,
-    members: [userId]
+    members: [userId],
+    chatLog: []
   }
 
   if(req.body.location) {
@@ -286,6 +287,42 @@ server.post('/api/joinGroup', async function (req, res) {
 
     console.log('done')
     res.status(200).send("Joined Group successfully.")
+
+  } catch(err) {
+    console.log(err);
+    res.status(500).send("DB error");
+  }
+});
+
+
+/**
+ * Used by frontend to add content to a group's chat log
+ * @params  groupId: id of the group 
+ *          content: chat content (String)
+ * @returns 200 - success, or other error code
+ */
+server.post('/api/newChat', async function (req, res) {
+  var db = await getDB();
+  console.log(`POST /api/newChat with body ${req.body.toString()}`);
+  
+  const userId = parseInt(req.user._id);
+  const groupId = parseInt(req.body.groupId);
+  if (!req.body.groupId || !req.body.content) {
+    return res.status(400).send("Invalid Form");
+  }
+
+  try {
+    const group = await db.collection("groups").findOne({_id: groupId});
+    var newChat = {
+      uid: userId,
+      content: req.body.content,
+      time: new Date()
+    };
+    group.chatLog.push(newChat);
+    await db.collection("groups").update({_id: groupId}, group)
+
+    console.log('done')
+    res.status(200).send("add new chat content successfully.")
 
   } catch(err) {
     console.log(err);
