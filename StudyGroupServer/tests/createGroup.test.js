@@ -156,6 +156,32 @@ describe('Create group', () => {
         expect(insertedGroup).toBeNull();
         done();
     });
+    
+    it('can create group with optional location field', async (done) => {
+        const date2 = new Date("2020-11-26T16:12:00Z");
+        const date3 = new Date("2020-11-26T18:12:00Z");
+        const res = await request(app)
+            .post('/api/createGroup')
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                className: "CSE210",
+                startTime: date2.toISOString(),
+                endTime: date3.toISOString(),
+                location: "EBU3b 4140"
+            });
 
+        expect(res.statusCode).toEqual(200);
+        const insertedGroup = await db.collection('groups').findOne({
+            className: 'CSE210',
+            startTime: date2
+        });
+        expect(insertedGroup.id).not.toBeNull();
+        expect(insertedGroup.endTime).toEqual(date3);
+        expect(insertedGroup.location).toEqual("EBU3b 4140");
+        expect(insertedGroup.members).toEqual([1]);
+        const inserdAlice = await db.collection('users').findOne({ _id: 1 });
+        expect(inserdAlice.joinedGroups).toContainEqual(insertedGroup._id);
+        done();
+    });
 });
 
