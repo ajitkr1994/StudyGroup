@@ -9,7 +9,7 @@ const date4 = new Date("2019-11-26T20:12:00Z");
 
 let token;
 
-describe('Search Groups', () => {
+describe('add chat and see chatLog in group details', () => {
     let connection;
     let db;
     let Alice;
@@ -200,6 +200,66 @@ describe('Search Groups', () => {
 
         expect(res.statusCode).toEqual(500);
         expect(res.text).toEqual("DB error");
+
+        done();
+    });
+    
+    it('alice should see chatLog in group1 detail', async (done) => {
+        const chat = "Have a nice day.";
+        const res = await request(app)
+            .get('/api/groupDetail?groupId=1')
+            .set('Authorization', 'Bearer ' + token);
+
+        expect(res.statusCode).toEqual(200);
+        console.log(JSON.stringify(res.body));
+
+        expect(res.body._id).toEqual(Group1._id);
+        expect(res.body.class).toEqual(Group1.class);
+        expect(res.body.members[0].email).toEqual(Alice.email);
+        expect(res.body.members[1].email).toEqual(Bill.email);
+        expect(res.body.location).toEqual(Group1.location);
+
+        expect(res.body.chatLog.length).toBe(4);
+
+        memberIds = []
+        res.body.members.forEach(member => {
+            memberIds.push(member._id);
+        });
+
+        res.body.chatLog.forEach(chat => {
+            expect(memberIds).toContain(chat.uid);
+            expect(chat.content).toBeTruthy();
+            expect(chat.time).toBeTruthy();
+        });
+        done();
+    });
+
+    it('alice should see chatLog in group2 detail', async (done) => {
+        const chat = "Have a nice day.";
+        const res = await request(app)
+            .get('/api/groupDetail?groupId=2')
+            .set('Authorization', 'Bearer ' + token);
+
+        expect(res.statusCode).toEqual(200);
+        console.log(JSON.stringify(res.body));
+
+        expect(res.body._id).toEqual(Group2._id);
+        expect(res.body.class).toEqual(Group2.class);
+        expect(res.body.members[0].email).toEqual(Alice.email);
+        expect(res.body.members[1].email).toEqual(Carol.email);
+
+        expect(res.body.chatLog.length).toBe(1);
+        
+        memberIds = []
+        res.body.members.forEach(member => {
+            memberIds.push(member._id);
+        });
+
+        res.body.chatLog.forEach(chat => {
+            expect(memberIds).toContain(chat.uid);
+            expect(chat.content).toBeTruthy();
+            expect(chat.time).toBeTruthy();
+        });
 
         done();
     });

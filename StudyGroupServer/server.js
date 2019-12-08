@@ -330,6 +330,51 @@ server.post('/api/newChat', async function (req, res) {
   }
 });
 
+/**
+ * Used by frontend to get group detail
+ * @params groupId: The group's id
+ * @returns Group: The group detail.
+ */
+server.get('/api/groupDetail', async function (req, res) {
+  var db = await getDB();
+  console.log("/api/groupDetail");
+  if (!req.query.groupId) {
+    return res.status(400).send("Please enter a class name.")
+  }
+  const groupId = parseInt(req.query.groupId);
+
+  db.collection("groups").aggregate([
+    {
+      $match: {"_id": groupId}
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "members",
+        foreignField: "_id",
+        as: "members"
+      }
+    },
+    {
+      $project: {
+        "_id": 1,
+        "class": 1,
+        "startTime": 1,
+        "endTime": 1,
+        "location": 1,
+        "members._id": 1,
+        "members.name": 1,
+        "members.email": 1,
+        "chatLog": 1,
+      }
+    }
+  ]).toArray(function (err, result) {
+    console.log(result);
+    res.send(result[0]);
+  });
+});
+
+
 // Error catcher
 server.use(function (err, req, res, next) {
   if (err) {
