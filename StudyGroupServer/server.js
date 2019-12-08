@@ -96,15 +96,21 @@ server.get('/api/findGroupsWithClassName', async function (req, res) {
 });
 
 
-// TODO: This should use req.user._id instead of req.query.email, req.user._id
-// will give the _id of the user the jwt is signed for. See leave group for example
+
+/**
+ * Used by frontend to search for a user's joined groups
+ * @params email: (Optional) email of the user to search for
+ *                use req.user._id as default to search for the user themself if no email
+ * @returns Group[]: The groups that the user is in.
+ */
 server.get('/api/userJoinedGroups', async function (req, res) {
   var db = await getDB();
-  email = req.query.email;
-  // TODO: catch no/bad email
-  console.log("received user's email:");
-  console.log(email);
-  db.collection("users").findOne({ "email": email }, { "joinedGroups": 1 }, function (err, g_ids) {
+  if(req.query.email) {
+    userQuery = { "email": req.query.email };
+  } else {
+    userQuery = { "_id": parseInt(req.user._id) };
+  }
+  db.collection("users").findOne(userQuery, { "joinedGroups": 1 }, function (err, g_ids) {
     db.collection("groups").aggregate([
       {
         $match: { $and: [{"_id": { "$in": g_ids.joinedGroups }}, {"endTime": {$gte: new Date()}} ] }
@@ -195,7 +201,7 @@ server.post('/api/user/signup', async function (req, res) {
  *         startTime: study group start time (ISO String format, see testcase) 
  *         endTime: study group end time (ISO String format)
  *         location: optional field, place for study group meeting (String)
- * @returns 400 - success, or other error code
+ * @returns 200 - success, or other error code
  */
 server.post('/api/createGroup', async function (req, res) {
   var db = await getDB();
@@ -218,7 +224,8 @@ server.post('/api/createGroup', async function (req, res) {
     className: className,
     startTime: startTime,
     endTime: endTime,
-    members: [userId]
+    members: [userId],
+    chatLog: []
   }
 
   if(req.body.location) {
@@ -248,7 +255,7 @@ server.post('/api/createGroup', async function (req, res) {
 /**
  * Used by frontend to join a user to certain group
  * @params groupId: id of the group to join
- * @returns 400 - success, or other error code
+ * @returns 200 - success, or other error code
  */
 server.post('/api/joinGroup', async function (req, res) {
   var db = await getDB();
@@ -286,6 +293,87 @@ server.post('/api/joinGroup', async function (req, res) {
     res.status(500).send("DB error");
   }
 });
+
+
+/**
+ * Used by frontend to add content to a group's chat log
+ * @params  groupId: id of the group 
+ *          content: chat content (String)
+ * @returns 200 - success, or other error code
+ */
+server.post('/api/newChat', async function (req, res) {
+  var db = await getDB();
+  console.log(`POST /api/newChat with body ${req.body.toString()}`);
+  
+  const userId = parseInt(req.user._id);
+  const groupId = parseInt(req.body.groupId);
+  if (!req.body.groupId || !req.body.content) {
+    return res.status(400).send("Invalid Form");
+  }
+
+  try {
+    const group = await db.collection("groups").findOne({_id: groupId});
+    var newChat = {
+      uid: userId,
+      content: req.body.content,
+      time: new Date()
+    };
+    group.chatLog.push(newChat);
+    await db.collection("groups").update({_id: groupId}, group)
+
+    console.log('done')
+    res.status(200).send("add new chat content successfully.")
+
+  } catch(err) {
+    console.log(err);
+    res.status(500).send("DB error");
+  }
+});
+
+/**
+ * Used by frontend to get group detail
+ * @params groupId: The group's id
+ * @returns Group: The group detail.
+ */
+server.get('/api/groupDetail', async function (req, res) {
+  var db = await getDB();
+  console.log("/api/groupDetail");
+  if (!req.query.groupId) {
+    return res.status(400).send("Please enter a class name.")
+  }
+  const groupId = parseInt(req.query.groupId);
+
+  db.collection("groups").aggregate([
+    {
+      $match: {"_id": groupId}
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "members",
+        foreignField: "_id",
+        as: "members"
+      }
+    },
+    {
+      $project: {
+        "_id": 1,
+        "class": 1,
+        "startTime": 1,
+        "endTime": 1,
+        "location": 1,
+        "members._id": 1,
+        "members.name": 1,
+        "members.email": 1,
+        "chatLog": 1,
+      }
+    }
+  ]).toArray(function (err, result) {
+    console.log(result);
+    res.send(result[0]);
+  });
+});
+
 
 // Error catcher
 server.use(function (err, req, res, next) {

@@ -33,6 +33,7 @@ var Group1 = {
     startTime: date1,
     endTime: date2,
     members: [],
+    chatLog: [],
     location: "Geisel East, 2 Floor"
 }
 
@@ -41,11 +42,30 @@ var Group2 = {
     class : "CSE202",
     startTime: date3,
     endTime: date4,
-    members: []
+    members: [],
+    chatLog: []
 }
 
 Group1.members = [Alice._id, Bill._id];
 Group2.members = [Alice._id, Carol._id];
+
+Group1.chatLog = [
+    {
+        uid: Alice._id,
+        content: "Let's discuss the first chapter of Mythical Man Month!",
+        time: new Date("2020-11-24T20:12:00Z")
+    }, 
+    {
+        uid: Bill._id,
+        content: "Sounds good. I'll bring the book with me.",
+        time: new Date("2020-11-24T20:12:40Z")
+    }, 
+    {
+        uid: Alice._id,
+        content: "Cool",
+        time: new Date("2020-11-24T20:12:52Z")
+    }, 
+];
 
 Alice.joinedGroups = [Group1._id, Group2._id];
 Bill.joinedGroups = [Group1._id];
