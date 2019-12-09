@@ -7,7 +7,8 @@ import CreateGroupScreen from './CreateGroup'
 import {DrawerItems} from 'react-navigation-drawer';
 import { Container, Content, Header, Body, Left } from 'native-base';
 import React, {Component} from 'react';
-import {StyleSheet,Image,Text} from 'react-native';
+import {StyleSheet,Image,Text, AsyncStorage} from 'react-native';
+
 
 const DrawerHeader = (props) => (
     <Container>
@@ -15,8 +16,8 @@ const DrawerHeader = (props) => (
           <Image
             style={styles.drawerImage}
             source={require('../img/UCSD_logo.png')} />
-            <Text style = {styles.username}>Hi Alice</Text>
-            <Text style = {styles.email}>alice@ucsd.edu</Text>
+            <Text style = {styles.username}>Hi, User</Text>
+            <Text style = {styles.email}>Email</Text>
       </Header>
       <Content>
         <DrawerItems {...props} />

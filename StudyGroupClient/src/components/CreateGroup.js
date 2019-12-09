@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, SafeAreaView, Image, Button, TextInput, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import { Text, View, ScrollView, SafeAreaView, Image, Button, TextInput, StyleSheet, KeyboardAvoidingView, AsyncStorage} from 'react-native';
 import styles from '../styles/styles';
 import MyHeader from './shared/MyHeader';
 import t from 'tcomb-form-native'; // 0.6.9
 //import DateTimePicker from '@react-native-community/datetimepicker';
+import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 
 
 const Form = t.form.Form;
@@ -25,7 +26,7 @@ var options = {
       placeholder: 'Geisel Library',
     },
     date: {
-      placeholder: 'MM/DD/YY',
+      placeholder: 'YYYY-MM-DD',
     },
     time: {
       placeholder: 'HH:MM',
@@ -47,11 +48,53 @@ class CreateGroupScreen extends Component {
 
 
     // Send this value to backend for creating the group.   
-    handleSubmit = () => {
-    // do the things  
+    handleSubmit = async() => {
+    var DEMO_TOKEN = await AsyncStorage.getItem(STORAGE_KEY);
+    var user_email = await AsyncStorage.getItem(USER_EMAIL);
+
     const value = this._form.getValue(); // Send this value to backend.
     console.log('value: ', value);
-    this.setState({value: null}); // <-- Clear form after 'Create Group' has been clicked.
+
+    if (value) { // if validation fails, value will be null
+
+        var startTime = new Date(value.date+"T"+value.time+":00");
+        console.log('startTime', startTime);
+
+        var endTime = new Date(startTime);
+        endTime.setHours(endTime.getHours() + 1);
+        console.log('endTime', endTime);        
+
+        // console.log('startTime = ', startTime);
+
+         fetch("http://13.58.215.99:3000/api/createGroup", {
+        method: "POST", 
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          startTime: startTime,
+          endTime: endTime, 
+          className: value.courseNumber,
+          location: value.location, 
+        })
+      }).then((response) => {
+        if (response.status === 200)
+        {
+          // If creation is successful, empty the cells.
+          this.setState({value: null});
+        }
+        else
+        {
+          // Do nothing.
+        }
+        return response.text()
+      })
+         .then((responseData) => {
+      })
+      .done();
+    }
+
   }
   
     render() {

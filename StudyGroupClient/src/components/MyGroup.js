@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, SafeAreaView, Image, Button} from 'react-native';
+import { Text, View, ScrollView, SafeAreaView, Image, Button, AsyncStorage} from 'react-native';
 import styles from '../styles/styles';
 import GroupCard from './shared/GroupCard';
 import MyHeader from './shared/MyHeader'
 import { Container, Content } from "native-base";
+import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
+
+
 class MyGroupScreen extends Component {
     static navigationOptions = {
       title: 'My Group',
@@ -21,9 +24,15 @@ class MyGroupScreen extends Component {
     }
 
     // Use the URL for showing the current groups of this user.
-    componentDidMount = () => {
-        fetch('http://18.222.34.199:3000/api/userJoinedGroups?email=alice@ucsd.edu', {
-          method: 'GET'
+    componentDidMount = async() => {
+    	var DEMO_TOKEN = await AsyncStorage.getItem(STORAGE_KEY);
+      	var user_email = await AsyncStorage.getItem(USER_EMAIL);
+
+        fetch('http://13.58.215.99:3000/api/userJoinedGroups?email='+user_email, {
+          method: 'GET',
+          headers: {
+      			'Authorization': 'Bearer ' + DEMO_TOKEN
+    		}
         })
         .then((response) => response.json())
         .then((responseJson) => {
