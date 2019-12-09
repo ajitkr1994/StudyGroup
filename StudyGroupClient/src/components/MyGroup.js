@@ -71,14 +71,16 @@ class MyGroupScreen extends Component {
       return res;
     }
 
-    formatContent(startTime, endTime, members) {
+    formatContent(startTime, endTime, members, location) {
       let content = "";
 
       content += "Date: " + this.findDate(startTime) + "\n";
       
       content += "Time: "; //+startTime+"-"+endTime;
-
       content += this.findTime(startTime) + "-" + this.findTime(endTime) + "\n";
+
+      content += "Location: " + location + "\n";
+
       content += "Members:"
       
 
@@ -93,7 +95,7 @@ class MyGroupScreen extends Component {
       const cards = [];
       for (let i=0; i < this.state.groups.length; i++) {
           cards.push(
-            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].class} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members)}/>
+            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].class} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
           ); 
           // todo key
       }
