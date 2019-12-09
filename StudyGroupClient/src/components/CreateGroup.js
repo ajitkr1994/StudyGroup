@@ -53,16 +53,21 @@ class CreateGroupScreen extends Component {
     var user_email = await AsyncStorage.getItem(USER_EMAIL);
 
     const value = this._form.getValue(); // Send this value to backend.
-    console.log('value: ', value);
+    //console.log('value: ', value);
 
     if (value) { // if validation fails, value will be null
 
-        var startTime = new Date(value.date+"T"+value.time+":00");
-        console.log('startTime', startTime);
+        var startTime1 = value.date+"T"+value.time+":00Z";
+        console.log('startTime', startTime1);
 
-        var endTime = new Date(startTime);
-        endTime.setHours(endTime.getHours() + 1);
-        console.log('endTime', endTime);        
+        var endTime1 = startTime1;
+        console.log('endTime', endTime1);
+        console.log('className', value.courseNumber);
+        console.log('---------------------');
+
+        if (!value.courseNumber || !startTime1 || !endTime1) {
+            console.log('Invalid Form');
+        }
 
         // console.log('startTime = ', startTime);
 
@@ -70,15 +75,17 @@ class CreateGroupScreen extends Component {
         method: "POST", 
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + DEMO_TOKEN
         },
         body: JSON.stringify({
-          startTime: startTime,
-          endTime: endTime, 
+          startTime: startTime1,
+          endTime: startTime1, 
           className: value.courseNumber,
-          location: value.location, 
+          // location: value.location, 
         })
       }).then((response) => {
+        console.log('CreateGroup responseCode=',response.status);
         if (response.status === 200)
         {
           // If creation is successful, empty the cells.
