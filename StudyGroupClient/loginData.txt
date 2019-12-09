@@ -1,4 +1,0 @@
-body:{
-email: 'abc@ucsd.edu',
-password: 'abc',
-}

@@ -81,14 +81,12 @@ class CreateGroupScreen extends Component {
       }).then((response) => {
         if (response.status === 200)
         {
-          // If login is successful, navigate to Main page.
-          this.props.navigation.navigate('Main')
+          // If creation is successful, empty the cells.
+          this.setState({value: null});
         }
         else
         {
-          // this.props.navigation.navigate('Main')
-              // this.setState({value: null}); // <-- Clear form after 'Create Group' has been clicked.
-
+          // Do nothing.
         }
         return response.text()
       })
@@ -97,7 +95,6 @@ class CreateGroupScreen extends Component {
       .done();
     }
 
-    this.setState({value: null}); // <-- Clear form after 'Create Group' has been clicked.
   }
   
     render() {
