@@ -67,8 +67,6 @@ class LogInPage extends Component {
 
     }
 
-
-
     handleRegister = () => {
       this.setState({value: null}); // <-- Clear form
       this.props.navigation.navigate('Register')
