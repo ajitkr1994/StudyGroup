@@ -82,7 +82,7 @@ class CreateGroupScreen extends Component {
           startTime: startTime1,
           endTime: startTime1, 
           className: value.courseNumber,
-          // location: value.location, 
+          location: value.location, 
         })
       }).then((response) => {
         console.log('CreateGroup responseCode=',response.status);
