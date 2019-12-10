@@ -11,7 +11,7 @@ import {StyleSheet,Image,Text, AsyncStorage,Alert} from 'react-native';
 import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 
 const DrawerHeader = (props) => {
-  const { navigate } = props.navigation;
+  const { navigate } = props.screenProps.navigation;
   return (
     <Container>
       <Header style={styles.drawerHeader}>
@@ -20,20 +20,7 @@ const DrawerHeader = (props) => {
             source={require('../img/UCSD_logo.png')} />
             <Text style = {styles.username}>Hi, Student</Text>
             <View style = {styles.email}>
-            <Text>{props.screenProps.email}</Text><Text style={{color:'blue'}} onPress={()=>
-              Alert.alert(
-                'Log out',
-                'Do you want to logout?',
-                [
-                  {text: 'Cancel', onPress: () => {return null}},
-                  {text: 'Confirm', onPress: () => {
-                    AsyncStorage.clear();
-                    navigate('LogIn')
-                  }},
-                ],
-                { cancelable: false }
-              )  
-            }>Sign Out</Text>
+            <Text>{props.screenProps.email}</Text><Text style={{color:'blue'}} onPress={()=>navigate('LogIn')}>Sign Out</Text>
             </View>
       </Header>
       <Content>
@@ -68,7 +55,9 @@ class MainPage extends React.Component {
 
   render() {
     return (
-      <Main screenProps={{email: this.state.email}} navigation={this.props.navigation}/>
+      <Main screenProps={{
+        email: this.state.email,
+        navigation:this.props.navigation}}/>
     );
   }
 }
