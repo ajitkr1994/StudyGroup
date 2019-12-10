@@ -26,6 +26,6 @@ const styles = StyleSheet.create({
       fontSize: 20
     },
     header: {
-      backgroundColor: "#007aff",
+      backgroundColor: "skyblue",
     }
   });

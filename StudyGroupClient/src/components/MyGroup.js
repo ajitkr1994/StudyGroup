@@ -26,7 +26,7 @@ class MyGroupScreen extends Component {
     // Use the URL for showing the current groups of this user.
     componentDidMount = async() => {
     	var DEMO_TOKEN = await AsyncStorage.getItem(STORAGE_KEY);
-      	var user_email = await AsyncStorage.getItem(USER_EMAIL);
+      var user_email = await AsyncStorage.getItem(USER_EMAIL);
 
         fetch('http://13.58.215.99:3000/api/userJoinedGroups?email='+user_email, {
           method: 'GET',

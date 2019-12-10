@@ -15,7 +15,6 @@ class HomeScreen extends Component {
       title: 'Home',
     };
 
-
     render() {
       return (
       <View>
