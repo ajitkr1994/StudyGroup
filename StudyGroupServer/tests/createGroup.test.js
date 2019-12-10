@@ -26,6 +26,13 @@ describe('Create group', () => {
             joinedGroups: []
         };
         await db.collection('users').insertOne(Alice);
+        Ian = {
+            name: "Ian",
+            email: "ian@ucsd.edu",
+            password: "ian",
+            joinedGroups: []
+        };
+        await db.collection('users').insertOne(Ian);
         done();
     });
 
@@ -183,6 +190,46 @@ describe('Create group', () => {
         expect(insertedGroup.members).toEqual([1]);
         const inserdAlice = await db.collection('users').findOne({ _id: 1 });
         expect(inserdAlice.joinedGroups).toContainEqual(insertedGroup._id);
+        done();
+    });
+
+    it('correct username password gets token', async (done) => {
+        const res = await request(app)
+            .post('/api/login')
+            .send({
+                email: 'ian@ucsd.edu',
+                password: 'ian'
+            });
+
+        expect(res.statusCode).toEqual(200);
+        // all tokens start with e.
+        token = res.text
+        expect(res.text[0]).toEqual('e');
+        console.log(res.text);
+        done();
+    });
+
+    
+    it('can create group with token', async (done) => {
+        const date1 = new Date("2020-11-26T14:12:00Z");
+        const date2 = new Date("2020-11-26T16:12:00Z");
+        const res = await request(app)
+            .post('/api/createGroup')
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                className: "CSE888",
+                startTime: date1.toISOString(),
+                endTime: date2.toISOString()
+            });
+
+        expect(res.statusCode).toEqual(200);
+        const insertedGroup = await db.collection('groups').findOne({ className: 'CSE888' });
+        expect(insertedGroup.id).not.toBeNull();
+        expect(insertedGroup.startTime).toEqual(date1);
+        expect(insertedGroup.endTime).toEqual(date2);
+        const insertedIan = await db.collection('users').findOne({ email: 'ian@ucsd.edu' });
+        expect(insertedGroup.members[0]).toEqual(insertedIan._id);
+        expect(insertedIan.joinedGroups).toContainEqual(insertedGroup._id);
         done();
     });
 });
