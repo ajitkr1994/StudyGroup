@@ -43,24 +43,25 @@ class LogInPage extends Component {
           password: value.password, 
         })
       }).then((response) => {
-        if (response.status === 200)
-        {
-          // If login is successful, navigate to Main page.
-          this.props.navigation.navigate('Main')
-        }
-        else
-        {
-          // this.props.navigation.navigate('Main')
-              // this.setState({value: null}); // <-- Clear form after 'Create Group' has been clicked.
-
-        }
-        return response.text()
+        
+          const statusCode = response.status;
+          const data = response.text();
+          
+        return Promise.all([statusCode, data]);
       })
-         .then((responseData) => {
-          this._onValueChange(STORAGE_KEY, responseData);
-          this._onValueChange(USER_EMAIL, value.emailAddress);
-        console.log('Response satus:', responseData);
-        console.log('user email Baka:', value.emailAddress);
+         .then(([status, responseData]) => {
+          
+          if (status === 200)
+          {
+              this._onValueChange(STORAGE_KEY, responseData);
+              this._onValueChange(USER_EMAIL, value.emailAddress);
+              console.log('Response satus:', responseData);
+              console.log('user email Baka:', value.emailAddress);  
+
+              // If login is successful, navigate to Main page.
+              this.props.navigation.navigate('Main')
+          }
+          
       })
       .done();
     }
