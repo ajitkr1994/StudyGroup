@@ -40,7 +40,7 @@ class MyGroupScreen extends Component {
               groups : [...responseJson]
           });
           console.log(this.state.groups)
-          console.log(this.state.groups[0].members)
+          console.log('Class Name should be:', this.state.groups[0].className);
           this.refreshGroupCards();
         })
         .catch((error) => {
@@ -95,7 +95,7 @@ class MyGroupScreen extends Component {
       const cards = [];
       for (let i=0; i < this.state.groups.length; i++) {
           cards.push(
-            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].class} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
+            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
           ); 
           // todo key
       }
