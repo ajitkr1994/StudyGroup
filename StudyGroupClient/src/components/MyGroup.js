@@ -93,7 +93,7 @@ class UpComing extends Component {
         date = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+'T'+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         if(date <= this.state.groups[i].startTime){
           cards.push(
-            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].class} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
+            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
           ); 
         }
       }
@@ -204,7 +204,7 @@ class UpComing extends Component {
         date = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+'T'+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         if(date > this.state.groups[i].startTime){
           cards.push(
-            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].class} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
+            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
           ); 
         }
       }
