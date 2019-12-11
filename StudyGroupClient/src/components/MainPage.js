@@ -2,7 +2,7 @@ import {createAppContainer} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer'
 import HomeScreen from './Home'
 import FindGroupScreen from './FindGroup'
-import MyGroupScreen from './MyGroup'
+import TabNavigator from './MyGroup'
 import CreateGroupScreen from './CreateGroup'
 import {DrawerItems} from 'react-navigation-drawer';
 import { Container, Content, Header, Body, Left, Button, View } from 'native-base';
@@ -31,9 +31,19 @@ const DrawerHeader = (props) => {
   }
 
 const MyDrawerNavigator = createDrawerNavigator({
-    Home: {screen: HomeScreen},
+    // Home: {screen: HomeScreen},
+    MyGroup: {screen: TabNavigator,
+      navigationOptions:{
+        title: 'My Group',
+        drawerLabel: 'My Group',
+        drawerIcon: ({ tintColor }) => (
+          <Image
+            source={require('../img/mygroup.png')}
+            style={[styles.icon]}
+          />
+        ),
+      }},
     FindGroup: {screen: FindGroupScreen},
-    MyGroup: {screen: MyGroupScreen},
     CreateGroup:{screen:CreateGroupScreen},
   },{
     contentComponent: DrawerHeader
@@ -84,7 +94,11 @@ const styles = StyleSheet.create({
       left:10,
       justifyContent: 'space-between',     
       paddingRight:30
-    }
+    },
+    icon: {
+      width: 20,
+      height: 20,
+    },
   })
 
 export default MainPage;

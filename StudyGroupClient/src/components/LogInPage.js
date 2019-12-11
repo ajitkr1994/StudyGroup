@@ -59,7 +59,8 @@ class LogInPage extends Component {
               console.log('user email Baka:', value.emailAddress);  
 
               // If login is successful, navigate to Main page.
-              this.props.navigation.navigate('Main')
+              this.props.navigation.navigate('Main');
+              this.setState({value: null});
           }
           
       })
