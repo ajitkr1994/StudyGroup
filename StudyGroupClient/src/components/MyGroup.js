@@ -101,8 +101,6 @@ class UpComing extends Component {
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + this.state.DEMO_TOKEN,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
       }
       })
       .then((response) => {
@@ -114,11 +112,12 @@ class UpComing extends Component {
 
         if (status === 200)
         {
+          this.refresh();
           console.log('Response status Baka:', status);
         }
       }).done();
       
-      this.refresh();
+      
     }
 
     refreshGroupCards() {
