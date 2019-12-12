@@ -69,11 +69,14 @@ class FindGroupScreen extends Component {
 
   refreshGroupCards() {
     const cards = [];
-    for (let i=0; i < this.state.groups.length; i++) {
+    var today = new Date();
+    var date = today.getFullYear() + '-' + today.getMonth() + '-' + today.getDate() + 'T' + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    for (let i = 0; i < this.state.groups.length; i++) {
+      if (date <= this.state.groups[i].startTime) {
         cards.push(
-          <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
-        ); 
-        // todo key
+          <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)} />
+        );
+      }
     }
     return cards;
   }
