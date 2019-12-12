@@ -44,7 +44,8 @@ class UpComing extends Component {
           this.setState({
               groups : [...responseJson]
           });
-          console.log(this.state.groups)
+          // console.log(this.state.groups)
+          // console.log('Class Name should be:', this.state.groups[0].className);
           this.refreshGroupCards();
         })
         .catch((error) => {
@@ -66,7 +67,7 @@ class UpComing extends Component {
 
       var res = "";
 
-      if (hour <11)
+      if (hour <12)
         res = String(hour) + "AM";
       else if (hour == 12)
         res = String(hour) + "PM";
@@ -82,7 +83,7 @@ class UpComing extends Component {
       content += "Date: " + this.findDate(startTime) + "\n";
       
       content += "Time: "; //+startTime+"-"+endTime;
-      content += this.findTime(startTime) + "-" + this.findTime(endTime) + "\n";
+      content += this.findTime(startTime) + "\n";
 
       content += "Location: " + location + "\n";
 
@@ -124,7 +125,7 @@ class UpComing extends Component {
       const cards = [];
       for (let i=0; i < this.state.groups.length; i++) {
         var today = new Date();
-        date = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+'T'+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var date = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+'T'+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         if(date <= this.state.groups[i].startTime){
           cards.push(
             <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)} title="Leave" func={()=> this.leaveGroup(this.state.groups[i]._id)} />
@@ -192,7 +193,8 @@ class Past extends Component {
           this.setState({
               groups : [...responseJson]
           });
-          console.log(this.state.groups)
+          // console.log(this.state.groups)
+          // console.log('Class Name should be:', this.state.groups[0].className);
           this.refreshGroupCards();
         })
         .catch((error) => {
@@ -230,7 +232,7 @@ class Past extends Component {
       content += "Date: " + this.findDate(startTime) + "\n";
       
       content += "Time: "; //+startTime+"-"+endTime;
-      content += this.findTime(startTime) + "-" + this.findTime(endTime) + "\n";
+      content += this.findTime(startTime) + "\n";
 
       content += "Location: " + location + "\n";
 
@@ -272,7 +274,7 @@ class Past extends Component {
       const cards = [];
       for (let i=0; i < this.state.groups.length; i++) {
         var today = new Date();
-        date = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+'T'+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var date = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+'T'+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         if(date > this.state.groups[i].startTime){
           cards.push(
             <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)} title="Leave" func={() => this.leaveGroup(this.state.groups[i]._id)} />

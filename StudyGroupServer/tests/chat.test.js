@@ -57,7 +57,7 @@ describe('add chat and see chatLog in group details', () => {
 
         Group1 = {
             _id: 1,
-            class: "CSE210",
+            className: "CSE210",
             startTime: date1,
             endTime: date2,
             members: [],
@@ -67,7 +67,7 @@ describe('add chat and see chatLog in group details', () => {
 
         Group2 = {
             _id: 2,
-            class: "CSE210",
+            className: "CSE210",
             startTime: date3,
             endTime: date4,
             members: [],
@@ -214,7 +214,7 @@ describe('add chat and see chatLog in group details', () => {
         console.log(JSON.stringify(res.body));
 
         expect(res.body._id).toEqual(Group1._id);
-        expect(res.body.class).toEqual(Group1.class);
+        expect(res.body.className).toEqual(Group1.className);
         expect(res.body.members[0].email).toEqual(Alice.email);
         expect(res.body.members[1].email).toEqual(Bill.email);
         expect(res.body.location).toEqual(Group1.location);
@@ -244,7 +244,7 @@ describe('add chat and see chatLog in group details', () => {
         console.log(JSON.stringify(res.body));
 
         expect(res.body._id).toEqual(Group2._id);
-        expect(res.body.class).toEqual(Group2.class);
+        expect(res.body.className).toEqual(Group2.className);
         expect(res.body.members[0].email).toEqual(Alice.email);
         expect(res.body.members[1].email).toEqual(Carol.email);
 
