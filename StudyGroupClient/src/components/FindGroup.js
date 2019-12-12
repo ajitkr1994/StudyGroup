@@ -4,6 +4,7 @@ import styles from '../styles/styles';
 import GroupCard from './shared/GroupCard';
 import MyHeader from './shared/MyHeader'
 import { Container, Content } from "native-base";
+import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 import SearchBar from 'react-native-search-bar';
 import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 
@@ -20,9 +21,44 @@ class FindGroupScreen extends Component {
     };
   
     state = {
+      myGroups: [],
+      searchGroups: [],
       groups: [],
       search: ''
     }
+
+    componentDidMount = async() => {
+      var DEMO_TOKEN = await AsyncStorage.getItem(STORAGE_KEY);
+      var user_email = await AsyncStorage.getItem(USER_EMAIL);
+      this.setState({
+        DEMO_TOKEN: DEMO_TOKEN,
+        user_email: user_email
+      })
+
+      this.refresh();
+    }
+
+  refresh() {
+    console.log("refresh");
+    if (this.state.user_email != '') {
+      fetch('http://13.58.215.99:3000/api/userJoinedGroups?email='+this.state.user_email, {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + this.state.DEMO_TOKEN
+    }
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        myGroups : [...responseJson]
+      });
+      console.log(this.state.myGroups);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+    }
+  }
 
   findDate(dateTime)
     {
@@ -67,6 +103,35 @@ class FindGroupScreen extends Component {
       return content;
     }
 
+    joinGroup(id) {
+      console.log("JOIN");
+      fetch('http://13.58.215.99:3000/api/joinGroup?groupId='+id, {
+        method: 'POST',
+        body: JSON.stringify({
+          groupId: id
+        }),
+        headers: {
+          'Authorization': 'Bearer ' + this.state.DEMO_TOKEN,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      }
+      })
+      .then((response) => {
+        const statusCode = response.status;
+        const data = response.text();
+
+        return Promise.all([statusCode, data]);
+      }).then(([status, responseData]) => {
+
+        if (status === 200)
+        {
+          console.log('Response status Baka:', status);
+          this.refresh();
+          this.fetchData(this.state.search);
+        }
+      }).done();
+    }
+
   refreshGroupCards() {
     const cards = [];
     var today = new Date();
@@ -74,9 +139,8 @@ class FindGroupScreen extends Component {
     for (let i = 0; i < this.state.groups.length; i++) {
       if (date <= this.state.groups[i].startTime) {
         cards.push(
-          <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)} />
-        );
-      }
+          <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)} title="Join" func={() => this.joinGroup(this.state.groups[i]._id)}/>
+        ); 
     }
     return cards;
   }
@@ -87,26 +151,51 @@ class FindGroupScreen extends Component {
 
   // Use the URL for showing the groups according to the class name that was searched (e.g. submit 'CSE210' in search bar)
   async fetchData(search) {
-    var DEMO_TOKEN = await AsyncStorage.getItem(STORAGE_KEY);
-      var user_email = await AsyncStorage.getItem(USER_EMAIL);
+
+    this.setState({
+      search : search
+    });
 
     const url = 'http://13.58.215.99:3000/api/findGroupsWithClassName?className=';
     fetch(url + search, {
-      method: 'GET', 
+      method: 'GET',
       headers: {
-            'Authorization': 'Bearer ' + DEMO_TOKEN
-        }
+            'Authorization': 'Bearer ' + this.state.DEMO_TOKEN
+    }
+
     })
     .then((response) => response.json())
     .then((responseJson) => {
       console.log(responseJson);
+      let groups = [...responseJson]
+      var filteredGroups = [];
+      for (let i=0; i < groups.length; i++) {
+        var check = true;
+        for (let j=0; j < this.state.myGroups.length; j++) {
+          if (groups[i]._id == this.state.myGroups[j]._id) {
+            check = false;
+          }
+        }
+
+        if (check == true) {
+          filteredGroups.push(groups[i]);
+        }
+
+      }
+
       this.setState({
-        groups: [...responseJson]
+        groups: filteredGroups
       });
       this.refreshGroupCards();
     })
     .catch((error) => {
       console.error(error);
+    });
+
+    var filteredGroups = [];
+
+    this.setState({
+      groups: filteredGroups
     });
   }
 

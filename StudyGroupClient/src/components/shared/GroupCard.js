@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from 'react-native'
+import { Button, StyleSheet, View } from 'react-native'
 import { Card, CardItem, Text, Body } from "native-base";
 export default class GroupCard extends Component {
   render() {
@@ -15,6 +15,7 @@ export default class GroupCard extends Component {
                 </Text>
               </Body>
             </CardItem>
+            <Button title={this.props.title} onPress={this.props.func}/>
           </Card>
     );
   }
