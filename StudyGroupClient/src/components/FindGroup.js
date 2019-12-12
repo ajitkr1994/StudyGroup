@@ -144,10 +144,6 @@ class FindGroupScreen extends Component {
     return cards;
   }
 
-  updateSearch = search=> {
-    this.setState({ search });
-  };
-
   // Use the URL for showing the groups according to the class name that was searched (e.g. submit 'CSE210' in search bar)
   fetchData(search) {
 
