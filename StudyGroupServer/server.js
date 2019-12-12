@@ -155,16 +155,16 @@ server.get('/api/leaveGroup', async function (req, res) {
   let usersInGroupWithoutThisUser = groupToLeaveFrom.members.filter( el => el !== userId);
   groupToLeaveFrom.members = usersInGroupWithoutThisUser;
   // Save group
-  await db.collection("groups").update({_id: groupId}, groupToLeaveFrom);
+  await db.collection("groups").updateOne({_id: groupId}, {$set: {members: usersInGroupWithoutThisUser}});
 
   const userRemoveFromGroup = await db.collection("users").findOne({_id: userId});
   if (!userRemoveFromGroup) {
     return res.status(400).send("Unknown User");
   }
   let groupsWithoutLeavingGroup = userRemoveFromGroup.joinedGroups.filter( el => el !== groupId);
-  userRemoveFromGroup.joinedGroups = groupsWithoutLeavingGroup;
+  //userRemoveFromGroup.joinedGroups = groupsWithoutLeavingGroup;
   // Save user
-  await db.collection("users").update({_id: userId}, userRemoveFromGroup);
+  await db.collection("users").updateOne({_id: userId}, {$set: {joinedGroups: groupsWithoutLeavingGroup}});
 
   res.status(200).send('Left Group')
 });
@@ -240,8 +240,8 @@ server.post('/api/createGroup', async function (req, res) {
       const user = await db.collection("users").findOne({_id: userId});
       var thisGroup = [r.insertedId]
       let joinedGroupsWithThisGroup = thisGroup.concat(user.joinedGroups)
-      user.joinedGroups = joinedGroupsWithThisGroup;
-      await db.collection("users").update({_id: userId}, user)
+      //user.joinedGroups = joinedGroupsWithThisGroup;
+      await db.collection("users").updateOne({_id: userId}, {$set: {joinedGroups: joinedGroupsWithThisGroup}})
 
       console.log('done')
       res.status(200).send("Group successfully created.")
@@ -276,15 +276,15 @@ server.post('/api/joinGroup', async function (req, res) {
     }
     var thisUser = [userId];
     let membersWithThisUser = thisUser.concat(group.members);
-    group.members = membersWithThisUser;
-    await db.collection("groups").update({_id: groupId}, group)
+    //group.members = membersWithThisUser;
+    await db.collection("groups").updateOne({_id: groupId}, {$set: {members: membersWithThisUser}})
 
     //add groupId to user.joinedGroup
     const user = await db.collection("users").findOne({_id: userId});
     var thisGroup = [groupId];
     let joinedGroupsWithThisGroup = thisGroup.concat(user.joinedGroups);
-    user.joinedGroups = joinedGroupsWithThisGroup;
-    await db.collection("users").update({_id: userId}, user)
+    //user.joinedGroups = joinedGroupsWithThisGroup;
+    await db.collection("users").updateOne({_id: userId}, {$set: {joinedGroups: joinedGroupsWithThisGroup}})
 
     console.log('done')
     res.status(200).send("Joined Group successfully.")
@@ -319,8 +319,9 @@ server.post('/api/newChat', async function (req, res) {
       content: req.body.content,
       time: new Date()
     };
-    group.chatLog.push(newChat);
-    await db.collection("groups").update({_id: groupId}, group)
+    newChatLog = group.chatLog;
+    newChatLog.push(newChat);
+    await db.collection("groups").updateOne({_id: groupId}, {$set: {chatLog: newChatLog}})
 
     console.log('done')
     res.status(200).send("add new chat content successfully.")
