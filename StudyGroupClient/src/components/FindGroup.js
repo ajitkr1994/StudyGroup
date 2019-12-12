@@ -149,7 +149,7 @@ class FindGroupScreen extends Component {
   };
 
   // Use the URL for showing the groups according to the class name that was searched (e.g. submit 'CSE210' in search bar)
-  async fetchData(search) {
+  fetchData(search) {
 
     this.setState({
       search : search
