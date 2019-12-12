@@ -10,7 +10,7 @@ import { NavigationEvents } from 'react-navigation';
 
 class UpComing extends Component {
     static navigationOptions = {
-      title: 'Up Coming',
+      title: 'Upcoming',
     };
 
     state = {
@@ -45,7 +45,6 @@ class UpComing extends Component {
               groups : [...responseJson]
           });
           console.log(this.state.groups)
-          console.log('Class Name should be:', this.state.groups[0].className);
           this.refreshGroupCards();
         })
         .catch((error) => {
@@ -97,13 +96,8 @@ class UpComing extends Component {
     }
 
     leaveGroup(id) {
-      console.log('ID = ',id);
-      console.log("Token = ", this.state.DEMO_TOKEN);
-      fetch('http://13.58.215.99:3000/api/leaveGroup', {
+      fetch('http://13.58.215.99:3000/api/leaveGroup?groupId='+id, {
         method: 'GET',
-        query: JSON.stringify({
-          groupId: id,
-        }),
         headers: {
           'Authorization': 'Bearer ' + this.state.DEMO_TOKEN,
           'Accept': 'application/json',
@@ -113,7 +107,6 @@ class UpComing extends Component {
       .then((response) => {
         const statusCode = response.status;
         const data = response.text();
-        console.log('Status:',statusCode);
 
         return Promise.all([statusCode, data]);
       }).then(([status, responseData]) => {
@@ -146,7 +139,7 @@ class UpComing extends Component {
         <View style={{flex: 1}}>
           <NavigationEvents onDidFocus={() => this.refresh()}/>
           <View>
-            <MyHeader title = 'My Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
+            <MyHeader title = 'My Groups' drawerOpen={() => this.props.navigation.openDrawer()}/>
           </View>
           <View style={{flex: 1, alignItems: "center"}}>
             <ScrollView style={{width:"90%"}}>
@@ -200,7 +193,6 @@ class Past extends Component {
               groups : [...responseJson]
           });
           console.log(this.state.groups)
-          console.log('Class Name should be:', this.state.groups[0].className);
           this.refreshGroupCards();
         })
         .catch((error) => {
@@ -252,12 +244,28 @@ class Past extends Component {
     }
 
     leaveGroup(id) {
-      fetch('http://13.58.215.99:3000/api/leaveGroup?groupId=' + id), {
+      fetch('http://13.58.215.99:3000/api/leaveGroup?groupId='+id, {
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + this.token
+          'Authorization': 'Bearer ' + this.state.DEMO_TOKEN,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      }
+      })
+      .then((response) => {
+        const statusCode = response.status;
+        const data = response.text();
+
+        return Promise.all([statusCode, data]);
+      }).then(([status, responseData]) => {
+
+        if (status === 200)
+        {
+          console.log('Response status Baka:', status);
         }
-      };
+      }).done();
+      
+      this.refresh();
     }
 
     refreshGroupCards() {

@@ -34,8 +34,8 @@ const MyDrawerNavigator = createDrawerNavigator({
     // Home: {screen: HomeScreen},
     MyGroup: {screen: TabNavigator,
       navigationOptions:{
-        title: 'My Group',
-        drawerLabel: 'My Group',
+        title: 'My Groups',
+        drawerLabel: 'My Groups',
         drawerIcon: ({ tintColor }) => (
           <Image
             source={require('../img/mygroup.png')}
