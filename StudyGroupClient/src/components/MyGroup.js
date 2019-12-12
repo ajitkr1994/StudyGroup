@@ -112,12 +112,12 @@ class UpComing extends Component {
 
         if (status === 200)
         {
-          this.refresh();
+          
           console.log('Response status Baka:', status);
         }
       }).done();
       
-      
+      this.refresh();
     }
 
     refreshGroupCards() {

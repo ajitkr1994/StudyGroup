@@ -147,7 +147,7 @@ class FindGroupScreen extends Component {
 
   // Use the URL for showing the groups according to the class name that was searched (e.g. submit 'CSE210' in search bar)
   fetchData(search) {
-    this.refresh();
+    // this.refresh();
     this.setState({
       search : search
     });
@@ -165,9 +165,9 @@ class FindGroupScreen extends Component {
       console.log(responseJson);
       let groups = [...responseJson]
       var filteredGroups = [];
-      var check = true;
+      
       for (let i=0; i < groups.length; i++) {
-        
+        var check = true;
         for (let j=0; j < this.state.myGroups.length; j++) {
           if (groups[i]._id == this.state.myGroups[j]._id) {
             check = false;
