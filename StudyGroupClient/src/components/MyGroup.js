@@ -6,8 +6,7 @@ import MyHeader from './shared/MyHeader'
 import { Container, Content } from "native-base";
 import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-
-
+import { NavigationEvents } from 'react-navigation';
 
 class UpComing extends Component {
     static navigationOptions = {
@@ -15,18 +14,29 @@ class UpComing extends Component {
     };
 
     state = {
-      groups : []
+      groups : [],
+      DEMO_TOKEN: '',
+      user_email: ''
     }
 
     // Use the URL for showing the current groups of this user.
     componentDidMount = async() => {
     	var DEMO_TOKEN = await AsyncStorage.getItem(STORAGE_KEY);
       var user_email = await AsyncStorage.getItem(USER_EMAIL);
+      this.setState({
+        DEMO_TOKEN: DEMO_TOKEN,
+        user_email: user_email
+      })
+      this.refresh()
+    }
 
-        fetch('http://13.58.215.99:3000/api/userJoinedGroups?email='+user_email, {
+    refresh() {
+      console.log('refresh')
+      if (this.state.user_email != '') {
+        fetch('http://13.58.215.99:3000/api/userJoinedGroups?email='+this.state.user_email, {
           method: 'GET',
           headers: {
-      			'Authorization': 'Bearer ' + DEMO_TOKEN
+      			'Authorization': 'Bearer ' + this.state.DEMO_TOKEN
     		}
         })
         .then((response) => response.json())
@@ -42,6 +52,7 @@ class UpComing extends Component {
           console.error(error);
         });
     }
+  }
 
     findDate(dateTime)
     {
@@ -77,13 +88,43 @@ class UpComing extends Component {
       content += "Location: " + location + "\n";
 
       content += "Members:"
-      
 
       for (let i=0; i< members.length; i++) {
         content += "\n" + members[i].name||""
       }
       console.log(content)
       return content;
+    }
+
+    leaveGroup(id) {
+      console.log('ID = ',id);
+      console.log("Token = ", this.state.DEMO_TOKEN);
+      fetch('http://13.58.215.99:3000/api/leaveGroup', {
+        method: 'GET',
+        query: JSON.stringify({
+          groupId: id,
+        }),
+        headers: {
+          'Authorization': 'Bearer ' + this.state.DEMO_TOKEN,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      }
+      })
+      .then((response) => {
+        const statusCode = response.status;
+        const data = response.text();
+        console.log('Status:',statusCode);
+
+        return Promise.all([statusCode, data]);
+      }).then(([status, responseData]) => {
+
+        if (status === 200)
+        {
+          console.log('Response status Baka:', status);
+        }
+      }).done();
+      
+      this.refresh();
     }
 
     refreshGroupCards() {
@@ -93,7 +134,7 @@ class UpComing extends Component {
         date = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+'T'+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         if(date <= this.state.groups[i].startTime){
           cards.push(
-            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
+            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)} title="Leave" func={()=> this.leaveGroup(this.state.groups[i]._id)} />
           ); 
         }
       }
@@ -103,6 +144,7 @@ class UpComing extends Component {
     render() {
       return (
         <View style={{flex: 1}}>
+          <NavigationEvents onDidFocus={() => this.refresh()}/>
           <View>
             <MyHeader title = 'My Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
           </View>
@@ -120,25 +162,37 @@ class UpComing extends Component {
     }
   }
 
-  class Past extends Component {
+class Past extends Component {
     static navigationOptions = {
       title: 'Past',
     };
 
     state = {
-      groups : []
+      groups : [],
+      DEMO_TOKEN: '',
+      user_email: ''
     }
 
     // Use the URL for showing the current groups of this user.
     componentDidMount = async() => {
-    	var DEMO_TOKEN = await AsyncStorage.getItem(STORAGE_KEY);
+      var DEMO_TOKEN = await AsyncStorage.getItem(STORAGE_KEY);
+      this.token = DEMO_TOKEN
       var user_email = await AsyncStorage.getItem(USER_EMAIL);
+      this.setState({
+        DEMO_TOKEN: DEMO_TOKEN,
+        user_email: user_email
+      })
+      this.refresh()
+    }
 
-        fetch('http://13.58.215.99:3000/api/userJoinedGroups?email='+user_email, {
+    refresh() {
+      console.log('refresh')
+      if (this.state.user_email != '') {
+        fetch('http://13.58.215.99:3000/api/userJoinedGroups?email='+this.state.user_email, {
           method: 'GET',
           headers: {
-      			'Authorization': 'Bearer ' + DEMO_TOKEN
-    		}
+            'Authorization': 'Bearer ' + this.state.DEMO_TOKEN
+        }
         })
         .then((response) => response.json())
         .then((responseJson) => {
@@ -153,6 +207,7 @@ class UpComing extends Component {
           console.error(error);
         });
     }
+  }
 
     findDate(dateTime)
     {
@@ -188,13 +243,21 @@ class UpComing extends Component {
       content += "Location: " + location + "\n";
 
       content += "Members:"
-      
 
       for (let i=0; i< members.length; i++) {
         content += "\n" + members[i].name||""
       }
       console.log(content)
       return content;
+    }
+
+    leaveGroup(id) {
+      fetch('http://13.58.215.99:3000/api/leaveGroup?groupId=' + id), {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + this.token
+        }
+      };
     }
 
     refreshGroupCards() {
@@ -204,7 +267,7 @@ class UpComing extends Component {
         date = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+'T'+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         if(date > this.state.groups[i].startTime){
           cards.push(
-            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
+            <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)} title="Leave" func={() => this.leaveGroup(this.state.groups[i]._id)} />
           ); 
         }
       }
@@ -214,6 +277,7 @@ class UpComing extends Component {
     render() {
       return (
         <View style={{flex: 1}}>
+          <NavigationEvents onDidFocus={() => this.refresh()}/>
           <View>
             <MyHeader title = 'My Group' drawerOpen={() => this.props.navigation.openDrawer()}/>
           </View>

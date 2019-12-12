@@ -4,6 +4,7 @@ import styles from '../styles/styles';
 import GroupCard from './shared/GroupCard';
 import MyHeader from './shared/MyHeader'
 import { Container, Content } from "native-base";
+import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 import SearchBar from 'react-native-search-bar';
 
 class FindGroupScreen extends Component {
@@ -81,7 +82,7 @@ class FindGroupScreen extends Component {
 
   // Use the URL for showing the groups according to the class name that was searched (e.g. submit 'CSE210' in search bar)
   fetchData(search) {
-    const url = 'http://18.222.34.199:3000/api/findGroupsWithClassName?className=';
+    const url = 'http://13.58.215.99:3000/api/findGroupsWithClassName?className=';
     fetch(url + search, {
       method: 'GET'
     })
