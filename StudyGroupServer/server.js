@@ -158,7 +158,7 @@ server.get('/api/leaveGroup', async function (req, res) {
   await db.collection("groups").update({_id: groupId}, groupToLeaveFrom);
 
   const userRemoveFromGroup = await db.collection("users").findOne({_id: userId});
-  if (!groupToLeaveFrom) {
+  if (!userRemoveFromGroup) {
     return res.status(400).send("Unknown User");
   }
   let groupsWithoutLeavingGroup = userRemoveFromGroup.joinedGroups.filter( el => el !== groupId);
