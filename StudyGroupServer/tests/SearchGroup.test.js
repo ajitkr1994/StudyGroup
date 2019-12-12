@@ -55,7 +55,7 @@ describe('Search Groups', () => {
 
         Group1 = {
             _id: 1,
-            class: "CSE210",
+            className: "CSE210",
             startTime: date1,
             endTime: date2,
             members: [],
@@ -64,7 +64,7 @@ describe('Search Groups', () => {
 
         Group2 = {
             _id: 2,
-            class: "CSE210",
+            className: "CSE210",
             startTime: date3,
             endTime: date4,
             members: []
@@ -303,7 +303,7 @@ describe('Search Groups Responds with Ordered Array', () => {
          */
         Group1 = {
             _id: 1,
-            class: "CSE210",
+            className: "CSE210",
             startTime: date3,
             endTime: date4,
             members: []
@@ -311,7 +311,7 @@ describe('Search Groups Responds with Ordered Array', () => {
 
         Group2 = {
             _id: 2,
-            class: "CSE210",
+            className: "CSE210",
             startTime: date1,
             endTime: date2,
             members: []
