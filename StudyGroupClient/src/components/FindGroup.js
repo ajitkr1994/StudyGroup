@@ -6,7 +6,6 @@ import MyHeader from './shared/MyHeader'
 import { Container, Content } from "native-base";
 import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 import SearchBar from 'react-native-search-bar';
-import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 
 class FindGroupScreen extends Component {
     static navigationOptions = {
