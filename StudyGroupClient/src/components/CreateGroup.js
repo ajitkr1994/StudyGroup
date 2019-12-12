@@ -5,6 +5,7 @@ import MyHeader from './shared/MyHeader';
 import t from 'tcomb-form-native'; // 0.6.9
 import { STORAGE_KEY, USER_EMAIL } from './LogInPage';
 
+console.disableYellowBox = true;
 
 const Form = t.form.Form;
 
@@ -93,7 +94,7 @@ class CreateGroupScreen extends Component {
           console.log('CreateGroup responseCode=', response.status);
           if (response.status === 200) {
             // If creation is successful, empty the cells.
-            this.setState({ value: null });
+            // this.setState({ value: null });
           }
           else {
             // Do nothing.
@@ -104,7 +105,7 @@ class CreateGroupScreen extends Component {
           })
           .done();
           this.setState({
-            warning: ''
+            warning: 'A new group has been created successfully!'
           })
       }
     }
@@ -144,7 +145,8 @@ const styles1 = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   warning:{
-    color:'red'
+    color:'red',
+    textAlign: 'center'
   }
 });
 

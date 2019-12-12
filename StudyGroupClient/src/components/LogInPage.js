@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Button, StyleSheet, Text, AsyncStorage} from 'react-native';
+import { View, Button, StyleSheet, Text, AsyncStorage } from 'react-native';
 import t from 'tcomb-form-native'; // 0.6.9
-//import DateTimePicker from '@react-native-community/datetimepicker';
 
+console.disableYellowBox = true;
 
 const Form = t.form.Form;
 
@@ -10,6 +10,15 @@ const userInfo = t.struct({
   emailAddress: t.String,
   password: t.String,
 });
+
+var options = {
+  fields: {
+    password: {
+      password: true,
+      secureTextEntry: true,
+    }
+  }
+};
 
 var STORAGE_KEY = 'id_token';
 var USER_EMAIL = 'user_email';
@@ -24,62 +33,62 @@ class LogInPage extends Component {
     }
   }
 
-    // Send this value to backend for creating the group.   
-    handleLogIn = () => {
-      // do the things  
-      const value = this._form.getValue(); // Send this value to backend.
-      console.log('value: ', value);
-      // this.setState({value: null}); // <-- Clear form after 'Create Group' has been clicked.
+  // Send this value to backend for creating the group.   
+  handleLogIn = () => {
+    // do the things  
+    const value = this._form.getValue(); // Send this value to backend.
+    console.log('value: ', value);
+    // this.setState({value: null}); // <-- Clear form after 'Create Group' has been clicked.
 
-      if (value) { // if validation fails, value will be null
-         fetch("http://13.58.215.99:3000/api/login", {
-        method: "POST", 
+    if (value) { // if validation fails, value will be null
+      fetch("http://13.58.215.99:3000/api/login", {
+        method: "POST",
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          email: value.emailAddress, 
-          password: value.password, 
+          email: value.emailAddress,
+          password: value.password,
         })
       }).then((response) => {
-        
-          const statusCode = response.status;
-          const data = response.text();
-          
+
+        const statusCode = response.status;
+        const data = response.text();
+
         return Promise.all([statusCode, data]);
       })
-         .then(([status, responseData]) => {
-          
-          if (status === 200)
-          {
-              this._onValueChange(STORAGE_KEY, responseData);
-              this._onValueChange(USER_EMAIL, value.emailAddress);
-              console.log('Response satus:', responseData);
-              console.log('user email Baka:', value.emailAddress);  
+        .then(([status, responseData]) => {
 
-              // If login is successful, navigate to Main page.
-              this.props.navigation.navigate('Main');
-              this.setState({value: null});
+          if (status === 200) {
+            this._onValueChange(STORAGE_KEY, responseData);
+            this._onValueChange(USER_EMAIL, value.emailAddress);
+            console.log('Response satus:', responseData);
+            console.log('user email Baka:', value.emailAddress);
+
+            // If login is successful, navigate to Main page.
+            this.props.navigation.navigate('Main');
+            this.setState({ value: null });
           }
-          
-      })
-      .done();
+
+        })
+        .done();
     }
 
-    }
+  }
 
-    handleRegister = () => {
-      this.setState({value: null}); // <-- Clear form
-      this.props.navigation.navigate('Register')
-    }
-  
-    render() {
-      return (
-        <View style={styles1.container}>
-        <Form 
+  handleRegister = () => {
+    this.setState({ value: null }); // <-- Clear form
+    this.props.navigation.navigate('Register')
+  }
+
+  render() {
+    return (
+      <View style={styles1.container}>
+        <Form
           ref={c => this._form = c}
           type={userInfo}
+          options={options}
         />
         <Button
           title="Log In"
@@ -88,19 +97,19 @@ class LogInPage extends Component {
         <Text></Text>
         <Text></Text>
         <Text></Text>
-        
+
         <Button
           title="New User? Register here."
           onPress={this.handleRegister}
         />
       </View>
-      );
-    }
+    );
   }
+}
 
 const styles1 = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
     padding: 40,
     backgroundColor: '#ffffff',
@@ -108,5 +117,5 @@ const styles1 = StyleSheet.create({
 });
 
 export default LogInPage;
-export {STORAGE_KEY};
-export {USER_EMAIL};
+export { STORAGE_KEY };
+export { USER_EMAIL };

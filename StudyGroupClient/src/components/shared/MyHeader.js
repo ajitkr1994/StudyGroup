@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Header, Body, Title, Left, Icon, Right } from 'native-base'
 
+console.disableYellowBox = true;
+
 class MyHeader extends Component {
     render() {
       return (

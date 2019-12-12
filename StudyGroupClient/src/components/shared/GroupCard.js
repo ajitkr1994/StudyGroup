@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Button, StyleSheet, View } from 'react-native'
 import { Card, CardItem, Text, Body } from "native-base";
+
+console.disableYellowBox = true;
+
 export default class GroupCard extends Component {
   render() {
     return (

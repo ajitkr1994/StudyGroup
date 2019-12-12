@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { View, Button, StyleSheet, AsyncStorage, Text } from 'react-native';
 import t from 'tcomb-form-native'; // 0.6.9
 
+console.disableYellowBox = true;
+
 const Form = t.form.Form;
 
 const CourseInfo = t.struct({

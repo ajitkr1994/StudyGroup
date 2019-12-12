@@ -7,6 +7,8 @@ import { Container, Content } from "native-base";
 import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 import SearchBar from 'react-native-search-bar';
 
+console.disableYellowBox = true;
+
 class FindGroupScreen extends Component {
     static navigationOptions = {
       title:'Find Group',
@@ -134,7 +136,8 @@ class FindGroupScreen extends Component {
   refreshGroupCards() {
     const cards = [];
     var today = new Date();
-    var date = today.getFullYear() + '-' + today.getMonth() + '-' + today.getDate() + 'T' + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var month = today.getMonth()+1
+    var date = today.getFullYear() + '-' + month + '-' + today.getDate() + 'T' + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     for (let i = 0; i < this.state.groups.length; i++) {
       if (date <= this.state.groups[i].startTime) {
         cards.push(

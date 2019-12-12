@@ -10,6 +10,8 @@ import React, {Component} from 'react';
 import {StyleSheet,Image,Text, AsyncStorage,Alert} from 'react-native';
 import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 
+console.disableYellowBox = true;
+
 const DrawerHeader = (props) => {
   const { navigate } = props.screenProps.navigation;
   return (
@@ -31,7 +33,6 @@ const DrawerHeader = (props) => {
   }
 
 const MyDrawerNavigator = createDrawerNavigator({
-    // Home: {screen: HomeScreen},
     MyGroup: {screen: TabNavigator,
       navigationOptions:{
         title: 'My Groups',
