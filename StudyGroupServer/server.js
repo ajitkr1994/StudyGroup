@@ -359,7 +359,7 @@ server.get('/api/groupDetail', async function (req, res) {
     {
       $project: {
         "_id": 1,
-        "class": 1,
+        "className": 1,
         "startTime": 1,
         "endTime": 1,
         "location": 1,

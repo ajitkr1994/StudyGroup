@@ -29,7 +29,7 @@ var Carol = {
 
 var Group1 = {
     _id:1,
-    class : "CSE210",
+    className : "CSE210",
     startTime: date1,
     endTime: date2,
     members: [],
@@ -39,7 +39,7 @@ var Group1 = {
 
 var Group2 = {
     _id:2,
-    class : "CSE202",
+    className : "CSE202",
     startTime: date3,
     endTime: date4,
     members: [],
