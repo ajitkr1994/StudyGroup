@@ -57,7 +57,7 @@ class CreateGroupScreen extends Component {
     //console.log('value: ', value);
     if (value) { // if validation fails, value will be null
       var today = new Date();
-      date = today.getFullYear() + '-' + today.getMonth() + '-' + today.getDate() + 'T' + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      var date = today.getFullYear() + '-' + today.getMonth() + '-' + today.getDate() + 'T' + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       var startTime1 = value.date + "T" + value.time + ":00Z";
       if (startTime1 < date) {
         this.setState({
