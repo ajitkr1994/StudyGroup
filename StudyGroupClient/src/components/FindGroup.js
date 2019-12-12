@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, SafeAreaView, Image, Button} from 'react-native';
+import { Text, View, ScrollView, SafeAreaView, Image, Button, AsyncStorage} from 'react-native';
 import styles from '../styles/styles';
 import GroupCard from './shared/GroupCard';
 import MyHeader from './shared/MyHeader'
 import { Container, Content } from "native-base";
 import SearchBar from 'react-native-search-bar';
+import {STORAGE_KEY, USER_EMAIL} from './LogInPage';
 
 class FindGroupScreen extends Component {
     static navigationOptions = {
@@ -36,7 +37,7 @@ class FindGroupScreen extends Component {
 
       var res = "";
 
-      if (hour <11)
+      if (hour <12)
         res = String(hour) + "AM";
       else if (hour == 12)
         res = String(hour) + "PM";
@@ -46,14 +47,16 @@ class FindGroupScreen extends Component {
       return res;
     }
 
-    formatContent(startTime, endTime, members) {
+    formatContent(startTime, endTime, members, location) {
       let content = "";
 
       content += "Date: " + this.findDate(startTime) + "\n";
       
       content += "Time: "; //+startTime+"-"+endTime;
+      content += this.findTime(startTime) + "\n";
 
-      content += this.findTime(startTime) + "-" + this.findTime(endTime) + "\n";
+      content += "Location: " + location + "\n";
+
       content += "Members:"
       
 
@@ -68,7 +71,7 @@ class FindGroupScreen extends Component {
     const cards = [];
     for (let i=0; i < this.state.groups.length; i++) {
         cards.push(
-          <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].class} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members)}/>
+          <GroupCard key={this.state.groups[i]._id} className={this.state.groups[i].className} content={this.formatContent(this.state.groups[i].startTime, this.state.groups[i].endTime, this.state.groups[i].members, this.state.groups[i].location)}/>
         ); 
         // todo key
     }
@@ -80,10 +83,16 @@ class FindGroupScreen extends Component {
   };
 
   // Use the URL for showing the groups according to the class name that was searched (e.g. submit 'CSE210' in search bar)
-  fetchData(search) {
-    const url = 'http://18.222.34.199:3000/api/findGroupsWithClassName?className=';
+  async fetchData(search) {
+    var DEMO_TOKEN = await AsyncStorage.getItem(STORAGE_KEY);
+      var user_email = await AsyncStorage.getItem(USER_EMAIL);
+
+    const url = 'http://13.58.215.99:3000/api/findGroupsWithClassName?className=';
     fetch(url + search, {
-      method: 'GET'
+      method: 'GET', 
+      headers: {
+            'Authorization': 'Bearer ' + DEMO_TOKEN
+        }
     })
     .then((response) => response.json())
     .then((responseJson) => {
