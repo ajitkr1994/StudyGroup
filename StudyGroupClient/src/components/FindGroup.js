@@ -143,6 +143,7 @@ class FindGroupScreen extends Component {
     }
     return cards;
   }
+}
 
   // Use the URL for showing the groups according to the class name that was searched (e.g. submit 'CSE210' in search bar)
   fetchData(search) {
@@ -155,7 +156,7 @@ class FindGroupScreen extends Component {
     fetch(url + search, {
       method: 'GET',
       headers: {
-            'Authorization': 'Bearer ' + this.state.DEMO_TOKEN
+            'Authorization': 'Bearer ' + this.state.DEMO_TOKEN,
     }
 
     })
